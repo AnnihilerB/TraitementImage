@@ -17,9 +17,9 @@ import android.view.View;
 public class ScrollZoomListener implements View.OnTouchListener {
 
     /**
-     * Overriding the onTouch method to handle zooming and scrolling on an image.
-     * The method knows how many fingers are on the screen and so decide if the user want to scroll or zoom.
-     * The ACTION_MASK is needed here because when a ezvent occurs, the ID of the event is included into the action.
+     * Overriding the onTouch method allows to handle zooming and scrolling on an image.
+     * The method knows how many fingers are on the screen and so decides if the user wants to scroll or zoom.
+     * The ACTION_MASK is needed here because when a event occurs, the ID of the event is included into the action.
      * ACTION_MASK allows us to get the ID of the action (e.g which finger presses the screen) by shifting bits.
      * @param view The view the method is used with.
      * @param motionEvent the event.

@@ -12,8 +12,8 @@ import android.widget.ImageView;
  */
 
 /**
- * Making our own ImageView class. It allows us to control what's displayed on the screen.
- * We will keep the basic display (Android rescaling)  and then it will be possible to zoom and scroll on the image.
+ * Making our own ImageView class allows us to control what's displayed on the screen.
+ * We will keep the basic display (Android rescaling)  and then it will be possible to zoom (in and out) and scroll on the image.
  */
 
 public class ImgView  extends ImageView {
