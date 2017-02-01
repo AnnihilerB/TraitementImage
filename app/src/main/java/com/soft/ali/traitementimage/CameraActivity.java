@@ -17,14 +17,6 @@ import java.io.IOException;
 
 public class CameraActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
-
-        launchCamera();
-    }
-
     File photoCaptured;
     Uri photoURI;
 
@@ -34,6 +26,15 @@ public class CameraActivity extends AppCompatActivity {
     private final String EXTENSION = "png";
     private final String ERROR_WRITING_IMAGE = "ERRWR";
     private final String ERROR_GETTING_IMAGE = "ERRGET";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        launchCamera();
+        finish();
+    }
+
+
 
     /**
      * This method checks if the device has any camera (front or back).
