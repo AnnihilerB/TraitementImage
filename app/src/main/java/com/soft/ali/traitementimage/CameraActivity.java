@@ -10,15 +10,15 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
 
 public class CameraActivity extends AppCompatActivity {
 
-    File photoCaptured;
-    Uri photoURI;
+    private File photoCaptured;
+    private Uri photoURI;
 
     //ID needed for requesting a capture from the camera.
     private static final int REQUEST_CAPTURE = 1;
@@ -30,11 +30,15 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        launchCamera();
-        finish();
+        if (deviceHasCamera()) {
+            launchCamera();
+            finish();
+        }
+        else {
+            Toast.makeText(this, "No camera available.", Toast.LENGTH_SHORT);
+            finish();
+        }
     }
-
-
 
     /**
      * This method checks if the device has any camera (front or back).
@@ -79,7 +83,8 @@ public class CameraActivity extends AppCompatActivity {
      * This method launches the camera and allows the user to capture a picture.
      * An Intent is launched to start the camera.
      * The captured image is placed in a temporary file then in a URI.
-     * A URI is needed ?????
+     * A URI is needed to store the captured image.
+     * the putExtra method tells to the camera that the image needs to be stored in this URI.
      * The data captured by the camera are stored in th URI and the result code is sent.
      */
     public void launchCamera(){
@@ -109,8 +114,6 @@ public class CameraActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e(ERROR_GETTING_IMAGE, e.getMessage());
         }
-
-
     }
 }
 
