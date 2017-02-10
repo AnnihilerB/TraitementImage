@@ -22,6 +22,12 @@ public class ImgProcessing {
 
 
         }
+
+
+    public void extensionDynamique(){
+        //La faire en HSV et ne pas toucher la teinte. Faire l'extension sur S puis repasser en RGB.
+    }
+
     }
 
 
