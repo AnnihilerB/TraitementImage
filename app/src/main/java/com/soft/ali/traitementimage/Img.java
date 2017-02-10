@@ -17,13 +17,14 @@ public class Img {
     private int width;
     private int height;
 
-   public Img (Bitmap bitmap) {
+    public Img (Bitmap bitmap) {
 
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
+        originalImage = bitmap;
+        width = originalImage.getWidth();
+        height = originalImage.getHeight();
         arraypixel = new int[width*height];
         bitmap.getPixels(arraypixel, 0, width, 0,0, width, height);
-   }
+    }
 
     public int [] getArraypixel() {
         return arraypixel;
