@@ -12,9 +12,10 @@ import android.graphics.Bitmap;
 
 public class Img {
 
+    Bitmap originalImage;
     private int arraypixel [];
-    private double width;
-    private double height;
+    private int width;
+    private int height;
 
    public Img (Bitmap bitmap) {
 
@@ -25,14 +26,14 @@ public class Img {
    }
 
     public int [] getArraypixel() {
-        return arraypixel.clone();
+        return arraypixel;
     }
 
-    public double getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public double getHeight() {
+    public int getHeight() {
         return height;
     }
 }
