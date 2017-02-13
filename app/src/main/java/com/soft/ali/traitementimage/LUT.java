@@ -8,7 +8,6 @@ import android.graphics.Color;
 
 public class LUT {
 
-    private static final int NBCOLORS = 256;
     private static final int CONTRAST = 255;
 
     private  int[] table;
@@ -16,9 +15,7 @@ public class LUT {
     private int max = 0;
 
     public LUT(){
-
-        table = new int[NBCOLORS];
-
+        table = new int[Constants.NBCOLORS];
     }
 
     public int getValueAt(int index){
@@ -26,12 +23,10 @@ public class LUT {
     }
 
     public void generate(Img image){
-
+        float[] hsv = new float[3];
         int[] pixels = image.getArraypixel();
 
         dynamique(pixels);
-
-        float[] hsv = new float[3];
 
         for (int i = 0; i < table.length; i++){
             Color.colorToHSV(pixels[i], hsv);
