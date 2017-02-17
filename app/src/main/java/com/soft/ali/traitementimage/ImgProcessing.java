@@ -32,7 +32,8 @@ public class ImgProcessing {
 
         for (int i = 0; i < pixels.length; i++){
             Color.colorToHSV(pixels[i], hsv);
-            hsv[Constants.HSV_SATURATION] = hist.getCumulativeHistogramValueAt((int)hsv[Constants.HSV_SATURATION]) * 255 / nbPixels;
+            int val = Math.round(hsv[Constants.HSV_VIBRANCE]);
+            hsv[Constants.HSV_VIBRANCE] = hist.getCumulativeHistogramValueAt(val) * 255 / nbPixels;
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
