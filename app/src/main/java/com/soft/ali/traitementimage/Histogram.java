@@ -28,23 +28,22 @@ public class Histogram {
         for (int i = 0; i < pixels.length; i++) {
 
             Color.colorToHSV(pixels[i], hsv);
-            hist[Math.round( hsv[Constants.HSV_SATURATION])]++;
+            hist[Math.round( hsv[Constants.HSV_VIBRANCE])]++;
         }
 
         int cumul = 0;
         for (int i = 0; i < Constants.NBCOLORS; i++){
-            cumul = cumulHist[i] + cumul;
+            cumul = hist[i] + cumul;
             cumulHist[i] = cumul;
         }
         nbpixels = cumulHist[255];
-
     }
 
-    public float getCumulativeHistogramValueAt(int index){
+    public int getCumulativeHistogramValueAt(int index){
         return cumulHist[index];
     }
 
-    public float getHistogramValueAt(int index){
+    public int getHistogramValueAt(int index){
         return hist[index];
     }
 
