@@ -5,6 +5,7 @@ package com.soft.ali.traitementimage;
  */
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 /**
  * A class used to get, from a bitmap, the array of pixels of a picture and its width and height.
