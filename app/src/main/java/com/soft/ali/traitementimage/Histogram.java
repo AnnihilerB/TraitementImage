@@ -11,9 +11,9 @@ import static android.content.ContentValues.TAG;
 
 public class Histogram {
 
-    int[] hist;
-    int[] cumulHist;
-    int nbpixels = 0;
+    private int[] hist;
+    private int[] cumulHist;
+    private int nbpixels = 0;
 
     public Histogram() {
         hist = new int[Constants.NBCOLORS];
@@ -23,11 +23,11 @@ public class Histogram {
     public void generateHSVHistogram(Img image, int channel) {
 
         int[] pixels = image.getArraypixel();
+        float[] hsv = new float[3];
 
         for (int i = 0; i < pixels.length; i++) {
-            float[] hsv = new float[3];
             Color.colorToHSV(pixels[i], hsv);
-            int val  = Math.round( hsv[channel]);
+            int val  = (int)(hsv[channel] * 255);
             hist[val]++;
         }
 
@@ -45,6 +45,10 @@ public class Histogram {
 
     public int getHistogramValueAt(int index){
         return hist[index];
+    }
+
+    public int getNbPixels(){
+        return nbpixels;
     }
 
 
