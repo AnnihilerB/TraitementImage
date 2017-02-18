@@ -1,6 +1,7 @@
 package com.soft.ali.traitementimage;
 
 import android.graphics.Color;
+import android.util.Log;
 
 /**
  * Created by ali on 27/01/2017.
@@ -23,17 +24,19 @@ public class ImgProcessing {
 
     public static void histogramEqualization(){
 
+        int channel = Constants.HSV_VIBRANCE;
+
         Histogram hist = new Histogram();
-        hist.generateHisotgram(image);
+        hist.generateHSVHistogram(image, channel);
 
         float nbPixels = hist.nbpixels;
         int pixels[] = image.getArraypixel();
-        float[] hsv = new float[3];
 
         for (int i = 0; i < pixels.length; i++){
+            float[] hsv = new float[3];
             Color.colorToHSV(pixels[i], hsv);
-            int val = Math.round(hsv[Constants.HSV_VIBRANCE]);
-            hsv[Constants.HSV_VIBRANCE] = hist.getCumulativeHistogramValueAt(val) * 255 / nbPixels;
+            int val = Math.round(hsv[channel]);
+            hsv[channel] = (hist.getCumulativeHistogramValueAt(val)  * 255) / nbPixels;
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
