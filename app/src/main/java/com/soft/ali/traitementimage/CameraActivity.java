@@ -1,12 +1,15 @@
 package com.soft.ali.traitementimage;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,9 +22,10 @@ public class CameraActivity extends AppCompatActivity {
 
     private File photoCaptured;
     private Uri photoURI;
+    Intent cam;
 
     //ID needed for requesting a capture from the camera.
-    private static final int REQUEST_CAPTURE = 1;
+    private static final int REQUEST_CAPTURE = 2;
     private final String FILE_NAME = "imgTmp";
     private final String EXTENSION = "png";
     private final String ERROR_WRITING_IMAGE = "ERRWR";
@@ -32,6 +36,7 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         if (deviceHasCamera()) {
             launchCamera();
+            setResult(RESULT_OK, cam);
             finish();
         }
         else {
@@ -57,10 +62,13 @@ public class CameraActivity extends AppCompatActivity {
      * @return
      */
     private File createTemporaryFile(){
+        File temp = Environment.getExternalStorageDirectory();
+        temp = new File(temp.getAbsolutePath() +"/.temp/");
+
         try {
-            return File.createTempFile(FILE_NAME, EXTENSION);
+            return File.createTempFile("picture", "jpg", temp);
         } catch (IOException e) {
-            Log.e(ERROR_WRITING_IMAGE,  e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -85,18 +93,18 @@ public class CameraActivity extends AppCompatActivity {
      * The captured image is placed in a temporary file then in a URI.
      * A URI is needed to store the captured image.
      * the putExtra method tells to the camera that the image needs to be stored in this URI.
-     * The data captured by the camera are stored in th URI and the result code is sent.
+     * The data captured by the camera are stored in the URI and the result code is sent.
      */
     public void launchCamera(){
 
-        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         photoCaptured = createTemporaryFile();
         photoURI = Uri.fromFile(photoCaptured);
 
-        camera.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+        cam.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
         try {
-            this.startActivityForResult(camera, REQUEST_CAPTURE);
+            this.startActivityForResult(cam, REQUEST_CAPTURE);
         }
         catch (NullPointerException e){
             e.printStackTrace();
@@ -105,15 +113,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void extractImage(){
-        ContentResolver cr = getContentResolver();
-        cr.notifyChange(photoURI, null);
 
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, photoURI);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(ERROR_GETTING_IMAGE, e.getMessage());
-        }
     }
 }
 
