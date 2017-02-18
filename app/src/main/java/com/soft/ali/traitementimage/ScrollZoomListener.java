@@ -45,13 +45,12 @@ public class ScrollZoomListener implements View.OnTouchListener {
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             //One finger on the screen.
             case MotionEvent.ACTION_DOWN:
-                Log.i("PTR", "One finger");
+                Log.i(Constants.POINTER, "One finger");
                 curX = motionEvent.getX();
                 curY = motionEvent.getY();
-                Log.i("VAL DOWN", String.valueOf(curX) + " "+String.valueOf(curY));
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.i("PTR", "Move");
+                Log.i(Constants.POINTER, "Move");
                 newX = motionEvent.getX();
                 newY = motionEvent.getY();
                 view.scrollBy((int)(curX-newX), (int)(curY - newY));
@@ -62,7 +61,7 @@ public class ScrollZoomListener implements View.OnTouchListener {
              //Multiple fingers on screen.
             case MotionEvent.ACTION_POINTER_DOWN:
                 //TODO zooming on the image.
-                Log.i("PTR", "Other fingers");
+                Log.i(Constants.POINTER, "Other fingers");
                 break;
         }
         return true;
