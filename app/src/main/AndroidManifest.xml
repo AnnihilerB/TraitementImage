@@ -3,7 +3,6 @@
     package="com.soft.ali.traitementimage">
 
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +15,8 @@
 
         <activity android:name=".MainActivity">
 
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,6 +25,9 @@
         </activity>
         <activity android:name=".CameraActivity"
             android:theme="@android:style/Theme.NoDisplay">
+
+            <uses-permission android:name="android.permission.CAMERA" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
         </activity>
     </application>
