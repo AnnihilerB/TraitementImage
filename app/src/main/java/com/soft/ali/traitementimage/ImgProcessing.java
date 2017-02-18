@@ -11,6 +11,12 @@ public class ImgProcessing {
 
     private static Img image;
 
+    /**
+     * This method changes the hue of an image.
+     * The user can choose the hue he wants from a color picker and the hue is change
+     * accordingly to the hue he choosed.
+     * The image is converted to HSV first then the hue is changed.
+     */
     public static void colorize() {
         float hsv[] = new float[3];
         int pixels[] = image.getArraypixel();
@@ -22,6 +28,16 @@ public class ImgProcessing {
         }
     }
 
+    /**
+     * This method extends the contrast of the image.
+     * To avoid blending wrong colors by working on separated RGB channels, the algorithm works on
+     * the V channel of the HSV colorspace.
+     * First, an histogram and a cumulative histogram are generated.
+     * Each pixel is converted into HSV. As the V component is between 0 and 1, the component is
+     * rescaled to be between 0 and 255.
+     * Then we get the value of the V component in the cumulative histogram. Then, this value is
+     * divided by the number of pixels in order to rescale it between 0 and 1.
+     */
     public static void histogramEqualization(){
 
         int channel = Constants.HSV_VIBRANCE;
@@ -29,14 +45,15 @@ public class ImgProcessing {
         Histogram hist = new Histogram();
         hist.generateHSVHistogram(image, channel);
 
-        float nbPixels = hist.nbpixels;
+        int nbPixels = hist.getNbPixels();
         int pixels[] = image.getArraypixel();
 
+        float[] hsv = new float[3];
+
         for (int i = 0; i < pixels.length; i++){
-            float[] hsv = new float[3];
             Color.colorToHSV(pixels[i], hsv);
-            int val = Math.round(hsv[channel]);
-            hsv[channel] = (hist.getCumulativeHistogramValueAt(val)  * 255) / nbPixels;
+            int val = (int)(hsv[channel] * 255); //Rescaling the value
+            hsv[channel] = ((float) hist.getCumulativeHistogramValueAt(val) / (float)nbPixels);
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
