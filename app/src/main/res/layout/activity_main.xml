@@ -10,8 +10,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.soft.ali.traitementimage.MainActivity">
 
-    <TextView
+    <com.soft.ali.traitementimage.ImgView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/contraste"
+        android:scaleType="center"/>
+
+    <Button
+        android:id="@+id/ega"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Ega"
+        android:layout_below="@+id/iv" />
+
 </RelativeLayout>
