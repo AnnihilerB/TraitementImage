@@ -13,22 +13,22 @@ public class Histogram {
 
     int[] hist;
     int[] cumulHist;
-    float nbpixels = 0;
+    int nbpixels = 0;
 
     public Histogram() {
         hist = new int[Constants.NBCOLORS];
         cumulHist = new int[Constants.NBCOLORS];
     }
 
-    public void generateHisotgram(Img image) {
+    public void generateHSVHistogram(Img image, int channel) {
 
-        float[] hsv = new float[3];
         int[] pixels = image.getArraypixel();
 
         for (int i = 0; i < pixels.length; i++) {
-
+            float[] hsv = new float[3];
             Color.colorToHSV(pixels[i], hsv);
-            hist[Math.round( hsv[Constants.HSV_VIBRANCE])]++;
+            int val  = Math.round( hsv[channel]);
+            hist[val]++;
         }
 
         int cumul = 0;
