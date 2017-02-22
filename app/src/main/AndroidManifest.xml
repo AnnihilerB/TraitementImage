@@ -22,11 +22,6 @@
         <activity
             android:name=".CameraActivity"
             android:theme="@android:style/Theme.NoDisplay">
-
-        </activity>
-
-        <activity android:name=".Main2Activity">
-
         </activity>
     </application>
 
