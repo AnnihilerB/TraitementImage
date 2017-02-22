@@ -25,18 +25,14 @@ public class CameraActivity extends AppCompatActivity {
     Intent cam;
 
     //ID needed for requesting a capture from the camera.
-    private static final int REQUEST_CAPTURE = 2;
-    private final String FILE_NAME = "imgTmp";
-    private final String EXTENSION = "png";
-    private final String ERROR_WRITING_IMAGE = "ERRWR";
-    private final String ERROR_GETTING_IMAGE = "ERRGET";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (deviceHasCamera()) {
             launchCamera();
-            setResult(RESULT_OK, cam);
+            //setResult(RESULT_OK, cam);
             finish();
         }
         else {
@@ -63,10 +59,12 @@ public class CameraActivity extends AppCompatActivity {
      */
     private File createTemporaryFile(){
         File temp = Environment.getExternalStorageDirectory();
-        temp = new File(temp.getAbsolutePath() +"/.temp/");
-
+        temp = new File(temp.getAbsolutePath() +"/.temp");
+        if (!temp.exists()){
+            temp.mkdir();
+        }
         try {
-            return File.createTempFile("picture", "jpg", temp);
+            return File.createTempFile(Constants.FILE_NAME, Constants.EXTENSION, temp);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,8 +81,12 @@ public class CameraActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CAPTURE  && resultCode == Activity.RESULT_OK)
-            extractImage();
+        Log.i("RESULT", "onActivityResult:");
+        if (requestCode == Constants.REQUEST_CAPTURE  && resultCode == Activity.RESULT_OK)
+            this.setResult(RESULT_OK, cam);
+        else{
+            this.setResult(RESULT_CANCELED);
+        }
     }
 
     /**
@@ -98,21 +100,12 @@ public class CameraActivity extends AppCompatActivity {
     public void launchCamera(){
 
         cam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
         photoCaptured = createTemporaryFile();
         photoURI = Uri.fromFile(photoCaptured);
 
         cam.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-        try {
-            this.startActivityForResult(cam, REQUEST_CAPTURE);
-        }
-        catch (NullPointerException e){
-            e.printStackTrace();
-        }
+        this.startActivityForResult(cam, Constants.REQUEST_CAPTURE);
 
-    }
-
-    private void extractImage(){
 
     }
 }
