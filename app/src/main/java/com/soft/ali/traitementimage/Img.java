@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class Img {
 
-    Bitmap originalImage;
+    private Bitmap originalImage;
     private int arraypixel [];
     private int width;
     private int height;
@@ -37,5 +37,16 @@ public class Img {
 
     public int getHeight() {
         return height;
+    }
+
+    public Bitmap getOriginalBitmap(){
+        return originalImage;
+    }
+
+    public void clearMemory(){
+        if (originalImage != null) {
+            originalImage.recycle();
+            arraypixel = null;
+        }
     }
 }
