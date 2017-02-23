@@ -39,14 +39,12 @@ public class ImgProcessing {
      * divided by the number of pixels in order to rescale it between 0 and 1.
      */
     public static void histogramEqualization(){
+        Histogram hist = new Histogram();
+        int pixels[] = image.getArraypixel();
 
         int channel = Constants.HSV_VIBRANCE;
-
-        Histogram hist = new Histogram();
-        hist.generateHSVHistogram(image, channel);
-
+        hist.generateHSVHistogram(pixels, channel);
         int nbPixels = hist.getNbPixels();
-        int pixels[] = image.getArraypixel();
 
         float[] hsv = new float[3];
 
