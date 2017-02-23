@@ -20,13 +20,14 @@ public class Histogram {
         cumulHist = new int[Constants.NBCOLORS];
     }
 
-    public void generateHSVHistogram(Img image, int channel) {
+    public void generateHSVHistogram(int []pix, int channel) {
 
-        int[] pixels = image.getArraypixel();
+        nbpixels = pix.length;
+
         float[] hsv = new float[3];
 
-        for (int i = 0; i < pixels.length; i++) {
-            Color.colorToHSV(pixels[i], hsv);
+        for (int i = 0; i < pix.length; i++) {
+            Color.colorToHSV(pix[i], hsv);
             int val  = (int)(hsv[channel] * 255);
             hist[val]++;
         }
@@ -36,7 +37,6 @@ public class Histogram {
             cumul = hist[i] + cumul;
             cumulHist[i] = cumul;
         }
-        nbpixels = cumulHist[255];
     }
 
     public int getCumulativeHistogramValueAt(int index){
