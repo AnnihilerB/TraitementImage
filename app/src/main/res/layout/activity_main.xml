@@ -14,8 +14,7 @@
         android:id="@+id/iv"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:src="@drawable/contraste"
-        android:scaleType="center"/>
+        android:src="@drawable/contraste"/>
 
     <Button
         android:id="@+id/ega"
@@ -23,5 +22,16 @@
         android:layout_height="wrap_content"
         android:text="Ega"
         android:layout_below="@+id/iv" />
+
+    <Button
+        android:id="@+id/cam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CAM"
+        android:layout_below="@+id/iv"
+        android:layout_toRightOf="@+id/ega"
+        android:layout_toEndOf="@+id/ega"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp" />
 
 </RelativeLayout>

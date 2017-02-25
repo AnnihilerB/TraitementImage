@@ -43,6 +43,12 @@ public class Img {
         return originalImage;
     }
 
+    /**
+     * This method is used to clear the RAM when a second image is loaded.
+     * As we use only one image at once, when the user selects a second image, the first one is
+     * unallocated.
+     * RAM is freed by dereferencing the array of pixels and by recycling the bitmap.
+     */
     public void clearMemory(){
         if (originalImage != null) {
             originalImage.recycle();

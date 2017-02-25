@@ -44,9 +44,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ImgProcessing.setImage(image);
-                //iv.setImageBitmap(bmp);
-                //cam = new Intent(this, CameraActivity.class);
-                //startActivityForResult(cam, Constants.REQUEST_CAPTURE);
+
             }
         });
 
@@ -71,13 +69,16 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        this.getContentResolver().notifyChange(photoURI, null);
+        //Capturing a photo via the camera doesn't return any data.
         if (requestCode == Constants.REQUEST_CAPTURE && resultCode == RESULT_OK ) {
+            //Cleaning the RAM.
             image.clearMemory();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
                 image = new Img(bitmap);
                 iv.setImageBitmap(image.getOriginalBitmap());
+                //Deleting the photo when loaded in RAM.
+                photoCaptured.delete();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -87,10 +88,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method checks if the device has any camera (front or back).
+     * The verification is made by accessing the package manager which gives information about the various application packages.
+     * As the phone camera is recognized as an app, checking if a camera is available is possible via the package manager.
+     * @return true if the device has a camera, false instead.
+     */
     private boolean deviceHasCamera(){
         return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
     }
 
+    /**
+     * This method launches the camera and allows the user to capture a picture.
+     * An Intent is launched to start the camera.
+     * The captured image is placed in a temporary file then in a URI.
+     * A URI is needed to store the captured image.
+     * the putExtra method tells to the camera that the image needs to be stored in this URI.
+     * The data captured by the camera are stored in th URI and the result code is sent.
+     */
     private void launchCamera(){
         Intent cam = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoCaptured = createTemporaryFile();
@@ -100,6 +115,11 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(cam, Constants.REQUEST_CAPTURE);
     }
 
+    /**
+     * Create a temporary file in memory to store the photo.
+     * The file is deleted when the user confirms the capture.
+     * @return The path of the temporary file.
+     */
     private File createTemporaryFile(){
         File temp = Environment.getExternalStorageDirectory();
         temp = new File(temp.getAbsolutePath() +"/.temp");
