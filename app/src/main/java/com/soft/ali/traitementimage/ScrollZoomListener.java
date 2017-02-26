@@ -1,5 +1,7 @@
 package com.soft.ali.traitementimage;
 
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +21,9 @@ public class ScrollZoomListener implements View.OnTouchListener {
 
     float curX = 0;
     float curY = 0;
+    Rect rectangleImageView;
+    Rect drawableRectangle = new Rect();
+    boolean intersection;
 
     /**
      * Overriding the onTouch method allows to handle zooming and scrolling on an image.
@@ -41,6 +46,10 @@ public class ScrollZoomListener implements View.OnTouchListener {
         //Cooridnates of the first finger ont the screen
         float newX, newY;
         //Coordinates of the moving finger
+        int[] location = new int[2];
+
+        rectangleImageView = new Rect(location[0], location[1], view.getWidth(), view.getHeight());
+        view.getLocationOnScreen(location);
 
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             //One finger on the screen.
@@ -48,14 +57,21 @@ public class ScrollZoomListener implements View.OnTouchListener {
                 Log.i(Constants.POINTER, "One finger");
                 curX = motionEvent.getX();
                 curY = motionEvent.getY();
+                view.getLocalVisibleRect(drawableRectangle);
+                intersection = drawableRectangle.intersect(rectangleImageView);
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.i(Constants.POINTER, "Move");
-                newX = motionEvent.getX();
-                newY = motionEvent.getY();
-                view.scrollBy((int)(curX-newX), (int)(curY - newY));
-                curX = newX;
-                curY = newY;
+                if (drawableRectangle.intersect(rectangleImageView)) {
+                    newX = motionEvent.getX();
+                    newY = motionEvent.getY();
+                    view.scrollBy((int) (curX - newX), (int) (curY - newY));
+                    curX = newX;
+                    curY = newY;
+                    Log.i("PTR", "iv left : " + String.valueOf(location[0]) + "exact center : " + String.valueOf((int)drawableRectangle.exactCenterX()) + "iv right : " + String.valueOf(view.getWidth()));
+                }
+                else {
+                    break;
+                }
                 break;
 
              //Multiple fingers on screen.
