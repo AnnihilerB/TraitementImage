@@ -6,6 +6,10 @@ package com.soft.ali.traitementimage;
 
 public class Constants {
 
+    public static final int LOAD_PERMISSIONS = 41;
+    public static final int CAMERA_PERMISSIONS = 42;
+    public static final int WRITE_PERMISSIONS = 43;
+
     //Convolution constants
     public static final int AVERAGE = 0;
     public static final int GAUSS = 1;
