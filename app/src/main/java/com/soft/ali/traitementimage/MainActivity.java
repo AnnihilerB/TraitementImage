@@ -1,22 +1,34 @@
 package com.soft.ali.traitementimage;
 
 import android.content.ClipData;
+import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,6 +70,17 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(mainContext, "No camera available", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Button bSave = (Button)findViewById(R.id.save);
+        bSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent write = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                write.addCategory(Intent.CATEGORY_OPENABLE);
+                write.setType("image/*");
+                startActivityForResult(write, Constants.WRITE_IMAGE);
+            }
+        });
     }
 
     /**
@@ -86,6 +109,12 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == Constants.REQUEST_CAPTURE && resultCode == RESULT_CANCELED){
             Toast.makeText(this, "Capture Canceled", Toast.LENGTH_SHORT).show();
         }
+        if (requestCode == Constants.WRITE_IMAGE  && resultCode == RESULT_OK && data != null) {
+            Uri FileToWrite = data.getData();
+            getPathFromURI(FileToWrite);
+        }
+
+
     }
 
     /**
@@ -95,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
      * @return true if the device has a camera, false instead.
      */
     private boolean deviceHasCamera(){
-        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
+        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY );
     }
 
     /**
@@ -132,5 +161,24 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void getPathFromURI(Uri imageURI){
+        ContentResolver cr = getContentResolver();
+        ParcelFileDescriptor fd;
+        FileOutputStream fos;
+        try {
+            fd = cr.openFileDescriptor(imageURI, "rw");
+            fos = new FileOutputStream(fd.getFileDescriptor());
+            Bitmap bmp = ((BitmapDrawable)iv.getDrawable()).getBitmap();
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
