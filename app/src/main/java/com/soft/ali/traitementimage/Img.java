@@ -59,4 +59,8 @@ public class Img {
             arraypixel = null;
         }
     }
+
+    public void resetArrayPixels(){
+        this.originalImage.getPixels(arraypixel,0,width,0,0,width,height);
+    }
 }

@@ -37,7 +37,9 @@ public class Constants {
     public static final String FILE_NAME = "imgTmp";
     public static final String EXTENSION = ".png";
 
-
-
+    //Mode Action Moves constants
+    public static final int MODE_NONE=0;
+    public static final int MODE_ZOOM=1;
+    public static final int MODE_DRAG =2;
 
 }
