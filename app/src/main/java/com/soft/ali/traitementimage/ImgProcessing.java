@@ -56,9 +56,64 @@ public class ImgProcessing {
         }
     }
 
+
+    /**
+     *extension dynamique via la lut
+     */
     public void extensionDynamique() {
         //La faire en HSV et ne pas toucher la teinte. Faire l'extension sur S puis repasser en RGB.
+        int pixels[] = image.getArraypixel();
+        float[] hsv = new float[3];
+        LUT lut = new LUT();
+        int max,min;
+        //initialisation de la LUT
+        lut.generate(image);
+        max = getMax(pixels);
+        min = getMin(pixels);
+        //calcul de la transformation et application à l'image
+        for (int i = 0; i <pixels.length; i++) {
+            Color.colorToHSV(pixels[i],hsv);
+            pixels[i]=lut.getValueAt(pixels[i]);
+            pixels[i]=Color.HSVToColor(hsv);
+        }
     }
+
+
+
+    public void toGray(){
+        int red, green, blue;
+        int rgb, total;
+        int pixels[] = image.getArraypixel();
+
+        for (int i = 0; i < pixels.length; i++) {
+            rgb = pixels[i];
+            red = ((Color.red(rgb)*3)/10);
+            green = ((Color.green(rgb)*59)/100);
+            blue = ((Color.blue(rgb)*11)/100);
+            total = red + green + blue;
+            rgb = Color.rgb(total, total, total);
+            pixels[i]=rgb;
+        }
+    }
+
+
+
+    public int getMax(int tab[]){
+        int max =-1;
+        for(int i =0; i<tab.length;i++){
+            max = Math.max(max,Color.red(tab[i]));
+        }
+        return max;
+    }
+
+    public int getMin(int tab[]){
+        int min =300;
+        for(int i =0; i<tab.length;i++){
+            min = Math.min(min,Color.red(tab[i]));
+        }
+        return min;
+    }
+
 
     public void convolution(int n, int typeFilter) {
         /* Filtre de taille impaire toujours.
