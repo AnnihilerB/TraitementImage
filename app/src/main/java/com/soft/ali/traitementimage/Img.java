@@ -18,6 +18,10 @@ public class Img {
     private int width;
     private int height;
 
+    public  Img(){
+        originalImage = null;
+    }
+
     public Img (Bitmap bitmap) {
 
         originalImage = bitmap;
