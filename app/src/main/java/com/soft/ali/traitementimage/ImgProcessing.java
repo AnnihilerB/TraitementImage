@@ -9,17 +9,8 @@ import android.graphics.Color;
 
 public class ImgProcessing {
 
-    private static final int AVERAGE = 0;
-    private static final int GAUSS = 1;
-    private static final int SOBEL = 2;
-    private static final int LAPLACE = 3;
-    private static final int LAPLACE2 = 4;
-
     private static Img image;
 
-    public ImgProcessing(Img imagea) {
-        image = imagea;
-    }
 
     /**
      * This method changes the hue of an image.
@@ -70,16 +61,13 @@ public class ImgProcessing {
     /**
      *extension dynamique via la lut
      */
-    public void extensionDynamique() {
+    public static void extensionDynamique() {
         //La faire en HSV et ne pas toucher la teinte. Faire l'extension sur S puis repasser en RGB.
         int pixels[] = image.getArraypixel();
         float[] hsv = new float[3];
         LUT lut = new LUT();
-        int max,min;
         //initialisation de la LUT
         lut.generate(image);
-        max = getMax(pixels);
-        min = getMin(pixels);
         //calcul de la transformation et application à l'image
         for (int i = 0; i <pixels.length; i++) {
             Color.colorToHSV(pixels[i],hsv);
@@ -90,7 +78,7 @@ public class ImgProcessing {
 
 
 
-    public void toGray(){
+    public static void toGray(){
         int red, green, blue;
         int rgb, total;
         int pixels[] = image.getArraypixel();
@@ -106,26 +94,7 @@ public class ImgProcessing {
         }
     }
 
-
-
-    public int getMax(int tab[]){
-        int max =-1;
-        for(int i =0; i<tab.length;i++){
-            max = Math.max(max,Color.red(tab[i]));
-        }
-        return max;
-    }
-
-    public int getMin(int tab[]){
-        int min =300;
-        for(int i =0; i<tab.length;i++){
-            min = Math.min(min,Color.red(tab[i]));
-        }
-        return min;
-    }
-
-
-    public void convolution(int n, int typeFilter) {
+    public static void convolution(int n, int typeFilter) {
         /* Filtre de taille impaire toujours.
         Pose le filtre sur l'imagee, le filtre calcule la valeur du pixel central en mulitipliant la valeur des pixels par la valeur du masque 1 à1.
         premiere case pixel * premiere case masque etc..
@@ -162,7 +131,7 @@ public class ImgProcessing {
         }
     }
 
-    private void calculConvolution(int [][] filtermatrix, int sizefilter) {
+    private static void calculConvolution(int [][] filtermatrix, int sizefilter) {
 
         int pixels[] = image.getArraypixel();
         int originalpixels[]=pixels.clone();
@@ -182,21 +151,7 @@ public class ImgProcessing {
         }
     }
 
-    public void Colorize(int chosenColor) {
-
-        float hsv[] = new float[3];
-        float hsvchosencolor[] = new float[3];
-        Color.colorToHSV(chosenColor, hsvchosencolor);
-        int pixels[] = image.getArraypixel();
-
-        for(int i=0; i<pixels.length; i++){
-            Color.colorToHSV(pixels[i], hsv);
-            hsv[0] = hsvchosencolor[0];
-            pixels[i] = Color.HSVToColor(hsv);
-        }
-    }
-
-    public void Overexposure () {
+    public static void overexposure () {
 
         float hsv[] = new float[3];
         int pixels[] = image.getArraypixel();
@@ -207,7 +162,7 @@ public class ImgProcessing {
         }
     }
 
-    public void fusion (Bitmap bitmapText) {
+    public static void fusion (Bitmap bitmapText) {
 
         int widthtext = bitmapText.getWidth();
         int heighttext = bitmapText.getHeight();
@@ -230,10 +185,6 @@ public class ImgProcessing {
 
     public static void setImage(Img imagebase){
         image = imagebase;
-    }
-
-    public static Img getImage(){
-        return image;
     }
 
 }
