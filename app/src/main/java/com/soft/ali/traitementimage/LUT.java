@@ -30,11 +30,11 @@ public class LUT {
 
         for (int i = 0; i < table.length; i++){
             Color.colorToHSV(pixels[i], hsv);
-            table[i] = getHistorgramEqualizationValue((int)hsv[1]);
+            table[i] = getExtensionValue((int)hsv[Constants.HSV_SATURATION]);
         }
     }
 
-    public int getHistorgramEqualizationValue(int value){
+    public int getExtensionValue(int value){
         return ( CONTRAST * (value - min) ) / (max - min);
     }
 
@@ -44,10 +44,12 @@ public class LUT {
 
         for (int i = 0; i< pixels.length; i++){
             Color.colorToHSV(pixels[i], hsv);
-            min = Math.min(min, (int)hsv[1]);
-            max = Math.max(max, (int)hsv[1]);
+            min = Math.min(min, (int)hsv[Constants.HSV_SATURATION]);
+            max = Math.max(max, (int)hsv[Constants.HSV_SATURATION]);
         }
     }
+
+
 
 
 
