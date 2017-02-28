@@ -1,5 +1,6 @@
 package com.soft.ali.traitementimage;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 
 /**
@@ -67,30 +68,30 @@ public class ImgProcessing {
 
         Filter filter = new Filter(n);
 
-        if(typeFilter == AVERAGE){
+        if(typeFilter == Constants.AVERAGE){
             filter.setAverage();
             calculConvolution(filter.getFilter(), filter.getsizefilter());
         }
 
-        if(typeFilter == GAUSS){
+        if(typeFilter == Constants.GAUSS){
             double sigma = 0.8;
             filter.setGauss(sigma);
             calculConvolution(filter.getFilter(), filter.getsizefilter());
         }
 
-        if(typeFilter == SOBEL){
+        if(typeFilter == Constants.SOBEL){
             filter.setSobelHorizontal();
             calculConvolution(filter.getFilter(), filter.getsizefilter());
             filter.setSobelVertical();
             calculConvolution(filter.getFilter(), filter.getsizefilter());
         }
 
-        if(typeFilter == LAPLACE){
+        if(typeFilter == Constants.LAPLACE){
             filter.setLaplace();
             calculConvolution(filter.getFilter(), filter.getsizefilter());
         }
 
-        if(typeFilter == LAPLACE2){
+        if(typeFilter == Constants.LAPLACE2){
             filter.setLaplace2();
             calculConvolution(filter.getFilter(), filter.getsizefilter());
         }
