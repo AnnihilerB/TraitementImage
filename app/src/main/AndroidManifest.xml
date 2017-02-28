@@ -21,16 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-    <activity android:name=".CameraActivity"
-        android:theme="@android:style/Theme.NoDisplay">
-
-    </activity>
-    <activity android:name=".Gallery"
-        android:theme="@style/Theme.AppCompat.Light">
-        </activity>
-
-
     </application>
 
 </manifest>
