@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -11,47 +10,28 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.soft.ali.traitementimage.MainActivity">
 
-    <Button
-        android:text="Gallery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="13dp"
-        android:id="@+id/button" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/paysage"
-        android:layout_marginTop="60dp"
-        android:id="@+id/imageView"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true" />
+    <com.soft.ali.traitementimage.ImgView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/contraste"/>
 
     <Button
-        android:text="Traitement"
+        android:id="@+id/ega"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/button"
-        android:layout_alignRight="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView"
-        android:layout_marginRight="30dp"
-        android:layout_marginEnd="30dp"
-        android:id="@+id/button2" />
+        android:text="Ega"
+        android:layout_below="@+id/iv" />
 
-    <SeekBar
-        android:id="@+id/seekbar_font"
+    <Button
+        android:id="@+id/cam"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="0"
-        android:layout_marginTop="10px"
-        android:layout_marginBottom="10px"
-        android:layout_alignRight="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView"
-        android:layout_alignLeft="@+id/imageView"
-        android:layout_alignStart="@+id/imageView"
-        android:layout_width="600dip"></SeekBar>
+        android:text="CAM"
+        android:layout_below="@+id/iv"
+        android:layout_toRightOf="@+id/ega"
+        android:layout_toEndOf="@+id/ega"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp" />
 
 </RelativeLayout>

@@ -1,6 +1,5 @@
 package com.soft.ali.traitementimage;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 
 /**
@@ -9,51 +8,56 @@ import android.graphics.Color;
 
 public class ImgProcessing {
 
-    private static final int AVERAGE = 0;
-    private static final int GAUSS = 1;
-    private static final int SOBEL = 2;
-    private static final int LAPLACE = 3;
-    private static final int LAPLACE2 = 4;
-
     private static Img image;
 
-    public ImgProcessing(Img imagea) {
-        image = imagea;
-    }
-
-   /* public static void colorize() {
+    /**
+     * This method changes the hue of an image.
+     * The user can choose the hue he wants from a color picker and the hue is change
+     * accordingly to the hue he choosed.
+     * The image is converted to HSV first then the hue is changed.
+     */
+    public static void colorize() {
         float hsv[] = new float[3];
         int pixels[] = image.getArraypixel();
         for (int i = 0; i < pixels.length; ++i) {
 
             Color.colorToHSV(pixels[i], hsv);
-            hsv[0] = (float) 120; // TODO: Work with the color picker.
+            hsv[Constants.HSV_HUE] = (float) 120;  // TODO: Work with the color picker.
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
 
+    /**
+     * This method extends the contrast of the image.
+     * To avoid blending wrong colors by working on separated RGB channels, the algorithm works on
+     * the V channel of the HSV colorspace.
+     * First, an histogram and a cumulative histogram are generated.
+     * Each pixel is converted into HSV. As the V component is between 0 and 1, the component is
+     * rescaled to be between 0 and 255.
+     * Then we get the value of the V component in the cumulative histogram. Then, this value is
+     * divided by the number of pixels in order to rescale it between 0 and 1.
+     */
     public static void histogramEqualization(){
-
         Histogram hist = new Histogram();
-        hist.generateHisotgram(image);
-
-        float nbPixels = hist.nbpixels;
         int pixels[] = image.getArraypixel();
+
+        int channel = Constants.HSV_VIBRANCE;
+        hist.generateHSVHistogram(pixels, channel);
+        int nbPixels = hist.getNbPixels();
+
         float[] hsv = new float[3];
 
         for (int i = 0; i < pixels.length; i++){
             Color.colorToHSV(pixels[i], hsv);
-            int val = Math.round(hsv[Constants.HSV_VIBRANCE]);
-            hsv[Constants.HSV_VIBRANCE] = hist.getCumulativeHistogramValueAt(val) * 255 / nbPixels;
+            int val = (int)(hsv[channel] * 255); //Rescaling the value
+            hsv[channel] = ((float) hist.getCumulativeHistogramValueAt(val) / (float)nbPixels);
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
 
-
     public void extensionDynamique() {
         //La faire en HSV et ne pas toucher la teinte. Faire l'extension sur S puis repasser en RGB.
     }
-    */
 
     public void convolution(int n, int typeFilter) {
         /* Filtre de taille impaire toujours.
@@ -99,15 +103,15 @@ public class ImgProcessing {
 
         if(sizefilter == 3) {
             for (int i = 1; i < pixels.length; i++) {
-                    pixels[i]=(originalpixels[i-1-image.getWidth()]*filtermatrix[0][0])
-                            +(originalpixels[i-image.getWidth()]*filtermatrix[0][1])
-                            +(originalpixels[i+1-image.getWidth()]*filtermatrix[0][2])
-                            +(originalpixels[i-1]*filtermatrix[1][0])
-                            +(originalpixels[i]*filtermatrix[1][1])
-                            +(originalpixels[i+1]*filtermatrix[1][2])
-                            +(originalpixels[i-1+image.getWidth()]*filtermatrix[2][0])
-                            +(originalpixels[i+image.getWidth()]*filtermatrix[2][1])
-                            +(originalpixels[i+1+image.getWidth()]*filtermatrix[2][2]);
+                pixels[i]=(originalpixels[i-1-image.getWidth()]*filtermatrix[0][0])
+                        +(originalpixels[i-image.getWidth()]*filtermatrix[0][1])
+                        +(originalpixels[i+1-image.getWidth()]*filtermatrix[0][2])
+                        +(originalpixels[i-1]*filtermatrix[1][0])
+                        +(originalpixels[i]*filtermatrix[1][1])
+                        +(originalpixels[i+1]*filtermatrix[1][2])
+                        +(originalpixels[i-1+image.getWidth()]*filtermatrix[2][0])
+                        +(originalpixels[i+image.getWidth()]*filtermatrix[2][1])
+                        +(originalpixels[i+1+image.getWidth()]*filtermatrix[2][2]);
             }
         }
     }
@@ -137,25 +141,26 @@ public class ImgProcessing {
         }
     }
 
-   public void fusion (Bitmap bitmapText) {
+    public void fusion (Bitmap bitmapText) {
 
-       int widthtext = bitmapText.getWidth();
-       int heighttext = bitmapText.getHeight();
+        int widthtext = bitmapText.getWidth();
+        int heighttext = bitmapText.getHeight();
 
-       int moyred, moygreen, moyblue;
-       int pixels[] = image.getArraypixel();
-       int pixelarraytext[] = new int[widthtext * heighttext];
-       if (pixelarraytext.length < pixels.length) {
-           for (int i = 0; i < pixelarraytext.length; i++) {
-               if (pixelarraytext[i] != Color.WHITE) {
-                   moyred = (Color.red(pixels[i]) + Color.red(pixelarraytext[i])) / 2;
-                   moygreen = (Color.green(pixels[i]) + Color.green(pixelarraytext[i])) / 2;
-                   moyblue = (Color.blue(pixels[i]) + Color.blue(pixelarraytext[i])) / 2;
-                   pixels[i] = Color.rgb(moyred, moygreen, moyblue);
-               }
-           }
-       }
-   }
+        int moyred, moygreen, moyblue;
+        int pixels[] = image.getArraypixel();
+        int pixelarraytext[] = new int[widthtext * heighttext];
+        if (pixelarraytext.length < pixels.length) {
+            for (int i = 0; i < pixelarraytext.length; i++) {
+                if (pixelarraytext[i] != Color.WHITE) {
+                    moyred = (Color.red(pixels[i]) + Color.red(pixelarraytext[i])) / 2;
+                    moygreen = (Color.green(pixels[i]) + Color.green(pixelarraytext[i])) / 2;
+                    moyblue = (Color.blue(pixels[i]) + Color.blue(pixelarraytext[i])) / 2;
+                    pixels[i] = Color.rgb(moyred, moygreen, moyblue);
+                }
+            }
+        }
+    }
+
 
     public static void setImage(Img imagebase){
         image = imagebase;

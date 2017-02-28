@@ -11,24 +11,25 @@ import static android.content.ContentValues.TAG;
 
 public class Histogram {
 
-    int[] hist;
-    int[] cumulHist;
-    float nbpixels = 0;
+    private int[] hist;
+    private int[] cumulHist;
+    private int nbpixels = 0;
 
     public Histogram() {
         hist = new int[Constants.NBCOLORS];
         cumulHist = new int[Constants.NBCOLORS];
     }
 
-    public void generateHisotgram(Img image) {
+    public void generateHSVHistogram(int []pix, int channel) {
+
+        nbpixels = pix.length;
 
         float[] hsv = new float[3];
-        int[] pixels = image.getArraypixel();
 
-        for (int i = 0; i < pixels.length; i++) {
-
-            Color.colorToHSV(pixels[i], hsv);
-            hist[Math.round( hsv[Constants.HSV_VIBRANCE])]++;
+        for (int i = 0; i < pix.length; i++) {
+            Color.colorToHSV(pix[i], hsv);
+            int val  = (int)(hsv[channel] * 255);
+            hist[val]++;
         }
 
         int cumul = 0;
@@ -36,7 +37,6 @@ public class Histogram {
             cumul = hist[i] + cumul;
             cumulHist[i] = cumul;
         }
-        nbpixels = cumulHist[255];
     }
 
     public int getCumulativeHistogramValueAt(int index){
@@ -45,6 +45,10 @@ public class Histogram {
 
     public int getHistogramValueAt(int index){
         return hist[index];
+    }
+
+    public int getNbPixels(){
+        return nbpixels;
     }
 
 
