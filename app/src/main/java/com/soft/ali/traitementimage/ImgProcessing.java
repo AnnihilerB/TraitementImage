@@ -23,7 +23,7 @@ public class ImgProcessing {
         for (int i = 0; i < pixels.length; ++i) {
 
             Color.colorToHSV(pixels[i], hsv);
-            hsv[0] = (float) 120; // TODO: Work with the color picker.
+            hsv[Constants.HSV_HUE] = (float) 120; // TODO: Work with the color picker.
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
