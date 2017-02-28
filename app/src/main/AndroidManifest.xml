@@ -26,6 +26,10 @@
             android:theme="@android:style/Theme.NoDisplay">
 
         </activity>
+        <activity android:name=".Gallery"
+            android:theme="@style/Theme.AppCompat.Light">
+
+        </activity>
     </application>
 
 </manifest>
