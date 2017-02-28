@@ -6,7 +6,15 @@ package com.soft.ali.traitementimage;
 
 public class Constants {
 
+    //Convolution constants
+    public static final int AVERAGE = 0;
+    public static final int GAUSS = 1;
+    public static final int SOBEL = 2;
+    public static final int LAPLACE = 3;
+    public static final int LAPLACE2 = 4;
+
     //Activity constants
+    public static int LOAD_IMAGE = 1;
     public static final int REQUEST_CAPTURE = 2;
     public static  final int WRITE_IMAGE = 3;
 
