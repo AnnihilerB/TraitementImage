@@ -8,6 +8,7 @@ public class Constants {
 
     //Activity constants
     public static final int REQUEST_CAPTURE = 2;
+    public static  final int WRITE_IMAGE = 3;
 
     //Int constants
     public static final int NBCOLORS = 256;
