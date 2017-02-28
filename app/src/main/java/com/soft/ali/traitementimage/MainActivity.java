@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity{
                 startGallery();
             }
         });
+        Button resetButton = (Button)findViewById(R.id.buttonReset); //TODO rajouter un bouton dans le layout
 
         seekBarFont.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -110,6 +111,15 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
+
+        //
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iv.setImageBitmap(image.getOriginalBitmap());
+                image.resetArrayPixels();//reset pixels table
+            }
+        });
     }
 
 
@@ -118,7 +128,7 @@ public class MainActivity extends AppCompatActivity{
      * It allows us to extract the data we need and use them later.
      *
      * @param requestCode is used to know which activity has returned.
-     * @param resultCode  allows us to know if the actiity has ended well or not.
+     * @param resultCode  allows us to know if the activity has ended well or not.
      * @param data        the activity returns.
      */
     @Override
