@@ -9,7 +9,17 @@ import android.graphics.Color;
 
 public class ImgProcessing {
 
+    private static final int AVERAGE = 0;
+    private static final int GAUSS = 1;
+    private static final int SOBEL = 2;
+    private static final int LAPLACE = 3;
+    private static final int LAPLACE2 = 4;
+
     private static Img image;
+
+    public ImgProcessing(Img imagea) {
+        image = imagea;
+    }
 
     /**
      * This method changes the hue of an image.
@@ -117,7 +127,7 @@ public class ImgProcessing {
 
     public void convolution(int n, int typeFilter) {
         /* Filtre de taille impaire toujours.
-        Pose le filtre sur l'aimge, le filtre calcule la valeur du pixel central en mulitipliant la valeur des pixels par la valeur du masque 1 à1.
+        Pose le filtre sur l'imagee, le filtre calcule la valeur du pixel central en mulitipliant la valeur des pixels par la valeur du masque 1 à1.
         premiere case pixel * premiere case masque etc..
          */
 
