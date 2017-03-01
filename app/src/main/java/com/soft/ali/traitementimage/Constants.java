@@ -6,6 +6,11 @@ package com.soft.ali.traitementimage;
 
 public class Constants {
 
+    public static final int MATRIX_X_POSITION = 2;
+    public static final int MATRIX_Y_POSITION = 5;
+    public static final int MATRIX_WIDTH_SCALE = 0;
+    public static final int MATRIX_HEIGHT_SCALE= 4;
+
     public static final int LOAD_PERMISSIONS = 41;
     public static final int CAMERA_PERMISSIONS = 42;
     public static final int WRITE_PERMISSIONS = 43;
@@ -42,8 +47,7 @@ public class Constants {
     public static final String EXTENSION = ".png";
 
     //Mode Action Moves constants
-    public static final int MODE_NONE=0;
     public static final int MODE_ZOOM=1;
-    public static final int MODE_DRAG =2;
+    public static final int MODE_SCROLL =2;
 
 }
