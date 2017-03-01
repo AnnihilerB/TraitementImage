@@ -10,10 +10,9 @@
 
     <com.soft.ali.traitementimage.ImgView
         android:id="@+id/iv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:scaleType="matrix"
-        android:src="@drawable/contraste" />
+        android:scaleType="matrix" />
 
     <HorizontalScrollView
         android:id="@+id/scroll"

@@ -16,11 +16,11 @@ public class Constants {
     public static final int WRITE_PERMISSIONS = 43;
 
     //Convolution constants
-    public static final int AVERAGE = 0;
-    public static final int GAUSS = 1;
-    public static final int SOBEL = 2;
-    public static final int LAPLACE = 3;
-    public static final int LAPLACE2 = 4;
+    public static final int AVERAGE = 50;
+    public static final int GAUSS = 51;
+    public static final int SOBEL = 52;
+    public static final int LAPLACE = 53;
+    public static final int LAPLACE2 = 54;
 
     //Activity constants
     public static int LOAD_IMAGE = 1;
@@ -47,7 +47,8 @@ public class Constants {
     public static final String EXTENSION = ".png";
 
     //Mode Action Moves constants
-    public static final int MODE_ZOOM=1;
-    public static final int MODE_SCROLL =2;
+    public static final int MODE_ZOOM=21;
+    public static final int MODE_SCROLL =22;
+    public static final int MODE_NONE = 20;
 
 }
