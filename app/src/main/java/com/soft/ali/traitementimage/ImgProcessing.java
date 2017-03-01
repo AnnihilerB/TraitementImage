@@ -2,6 +2,9 @@ package com.soft.ali.traitementimage;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.icu.text.SymbolTable;
+
+import java.util.Arrays;
 
 /**
  * Created by ali on 27/01/2017.
@@ -18,13 +21,13 @@ public class ImgProcessing {
      * accordingly to the hue he choosed.
      * The image is converted to HSV first then the hue is changed.
      */
-    public static void colorize() {
+    public static void colorize(int chosencolor) {
         float hsv[] = new float[3];
         int pixels[] = image.getArraypixel();
         for (int i = 0; i < pixels.length; ++i) {
 
             Color.colorToHSV(pixels[i], hsv);
-            hsv[Constants.HSV_HUE] = (float) 120;  // TODO: Work with the color picker.
+            hsv[Constants.HSV_HUE] = (float) chosencolor;
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
@@ -134,19 +137,19 @@ public class ImgProcessing {
     private static void calculConvolution(int [][] filtermatrix, int sizefilter) {
 
         int pixels[] = image.getArraypixel();
-        int originalpixels[]=pixels.clone();
+        int originalpixels[]= image.getArraypixel();
 
         if(sizefilter == 3) {
-            for (int i = 1; i < pixels.length; i++) {
-                pixels[i]=(originalpixels[i-1-image.getWidth()]*filtermatrix[0][0])
+            for (int i = 1; i < pixels.length-1; i++) {
+                pixels[i]=/*(originalpixels[i-1-image.getWidth()]*filtermatrix[0][0])
                         +(originalpixels[i-image.getWidth()]*filtermatrix[0][1])
-                        +(originalpixels[i+1-image.getWidth()]*filtermatrix[0][2])
+                        +(originalpixels[i+1-image.getWidth()]*filtermatrix[0][2])*/
                         +(originalpixels[i-1]*filtermatrix[1][0])
                         +(originalpixels[i]*filtermatrix[1][1])
-                        +(originalpixels[i+1]*filtermatrix[1][2])
-                        +(originalpixels[i-1+image.getWidth()]*filtermatrix[2][0])
+                        +(originalpixels[i+1]*filtermatrix[1][2]);
+                        /*+(originalpixels[i-1+image.getWidth()]*filtermatrix[2][0])
                         +(originalpixels[i+image.getWidth()]*filtermatrix[2][1])
-                        +(originalpixels[i+1+image.getWidth()]*filtermatrix[2][2]);
+                        +(originalpixels[i+1+image.getWidth()]*filtermatrix[2][2]);*/
             }
         }
     }
@@ -162,17 +165,75 @@ public class ImgProcessing {
         }
     }
 
+    public static void isolate() {
+
+        int chosencolor = Color.RED;
+        int limit = 200;
+
+        int canalgrey;
+        double valred = 0.3;
+        double valgreen = 0.59;
+        double valblue = 0.11;
+        int distance;
+
+        int pixels[] = image.getArraypixel();
+
+        for(int i=0; i<pixels.length; i++){
+            distance = (int)(Math.sqrt(Math.pow((Color.red(chosencolor)-Color.red(pixels[i])),2)+Math.pow((Color.green(chosencolor)-Color.green(pixels[i])),2)+Math.pow((Color.blue(chosencolor)-Color.blue(pixels[i])),2)));
+            if(distance >= limit) {
+                canalgrey = (int) ((Color.red(pixels[i]) * valred) + (Color.green(pixels[i]) * valgreen) + (Color.blue(pixels[i]) * valblue));
+                pixels[i] = Color.rgb(canalgrey, canalgrey, canalgrey);
+            }
+
+        }
+    }
+
+    public static void sepia(){
+
+        int pixels[] = image.getArraypixel();
+        double valred;
+        double valgreen;
+        double valblue;
+        int canalred;
+        int canalgreen;
+        int canalblue;
+
+        for(int i=0; i<pixels.length; i++){
+
+            valred = 0.393;
+            valgreen = 0.769;
+            valblue = 0.189;
+            canalred = (int) Math.min(255, ((Color.red(pixels[i])*valred)+(Color.green(pixels[i])*valgreen)+(Color.blue(pixels[i])*valblue)));
+
+            valred = 0.349;
+            valgreen = 0.686;
+            valblue = 0.168;
+            canalgreen = (int) Math.min(255, ((Color.red(pixels[i])*valred)+(Color.green(pixels[i])*valgreen)+(Color.blue(pixels[i])*valblue)));
+
+            valred = 0.272;
+            valgreen = 0.534;
+            valblue = 0.131;
+            canalblue = (int) Math.min(255, ((Color.red(pixels[i])*valred)+(Color.green(pixels[i])*valgreen)+(Color.blue(pixels[i])*valblue)));
+
+            pixels[i] = Color.rgb(canalred, canalgreen, canalblue);
+
+        }
+
+    }
+
     public static void fusion (Bitmap bitmapText) {
 
         int widthtext = bitmapText.getWidth();
         int heighttext = bitmapText.getHeight();
-
         int moyred, moygreen, moyblue;
         int pixels[] = image.getArraypixel();
         int pixelarraytext[] = new int[widthtext * heighttext];
+
+        bitmapText.getPixels(pixelarraytext,0,widthtext,0,0,widthtext,heighttext);
+
         if (pixelarraytext.length < pixels.length) {
             for (int i = 0; i < pixelarraytext.length; i++) {
-                if (pixelarraytext[i] != Color.WHITE) {
+                if (pixelarraytext[i] == Color.BLACK) {
                     moyred = (Color.red(pixels[i]) + Color.red(pixelarraytext[i])) / 2;
                     moygreen = (Color.green(pixels[i]) + Color.green(pixelarraytext[i])) / 2;
                     moyblue = (Color.blue(pixels[i]) + Color.blue(pixelarraytext[i])) / 2;
@@ -182,6 +243,108 @@ public class ImgProcessing {
         }
     }
 
+    public static void contrast (int typeContrast) {
+
+        int max = 0;
+        int min = 255;
+        int temp;
+        int intervalLimit = 180;
+        int canalgrey;
+        double valred = 0.3;
+        double valgreen = 0.59;
+        double valblue = 0.11;
+        int tempred;
+        int tempgreen;
+        int tempblue;
+        int minred = 0;
+        int maxred = 255;
+        int mingreen = 0;
+        int maxgreen = 255;
+        int minblue = 0;
+        int maxblue = 255;
+
+        int pixels[] = image.getArraypixel();
+
+        //Increase Contrast Grey
+        if (typeContrast == Constants.INCREASE_GREY) {
+
+            toGray();
+
+            for (int i = 0; i < pixels.length; i++) {
+                temp = Color.red(pixels[i]);
+                if (temp < min) {
+                    min = temp;
+                }
+                if (temp > max) {
+                    max = temp;
+                }
+            }
+
+            for (int i = 0; i < pixels.length; i++) {
+                temp = ((255 * (Color.red(pixels[i]) - min)) / (max - min));
+                pixels[i] = Color.rgb(temp, temp, temp);
+            }
+        }
+
+        //Decreasecontrastegrey
+        if (typeContrast == Constants.DECREASE_GREY) {
+
+            toGray();
+
+            for (int i = 0; i < pixels.length; i++) {
+                temp = Color.red(pixels[i]);
+                if (temp < min) {
+                    min = temp;
+                }
+                if (temp > max) {
+                    max = temp;
+                }
+            }
+
+            for (int i = 0; i < pixels.length; i++) {
+                temp = ((intervalLimit * (Color.red(pixels[i]) - min)) / (max - min));
+                pixels[i] = Color.rgb(temp, temp, temp);
+            }
+        }
+
+        //Increasecontrastcolor
+
+        if(typeContrast == Constants.INCREASE_COLOR) {
+
+            for (int i = 0; i < pixels.length; i++) {
+                tempred = Color.red(pixels[i]);
+                if (tempred < minred) {
+                    minred = tempred;
+                }
+                if (tempred > maxred) {
+                    maxred = tempred;
+                }
+
+                tempgreen = Color.green(pixels[i]);
+                if (tempgreen < mingreen) {
+                    mingreen = tempgreen;
+                }
+                if (tempgreen > maxgreen) {
+                    maxgreen = tempgreen;
+                }
+
+                tempblue = Color.blue(pixels[i]);
+                if (tempblue < minblue) {
+                    minblue = tempblue;
+                }
+                if (tempblue > maxblue) {
+                    maxblue = tempblue;
+                }
+            }
+
+            for (int i = 0; i < pixels.length; i++) {
+                tempred = ((255 * (Color.red(pixels[i]) - minred)) / (maxred - minred));
+                tempgreen = ((255 * (Color.green(pixels[i]) - mingreen)) / (maxgreen - mingreen));
+                tempblue = ((255 * (Color.blue(pixels[i]) - minblue)) / (maxblue - minblue));
+                pixels[i] = Color.rgb(tempred, tempgreen, tempblue);
+            }
+        }
+    }
 
     public static void setImage(Img imagebase){
         image = imagebase;

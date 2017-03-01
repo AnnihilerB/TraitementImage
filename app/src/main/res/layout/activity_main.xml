@@ -13,68 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"/>
 
-    <HorizontalScrollView
-        android:id="@+id/scroll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/iv">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/buttonGray"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Grayscale"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
-
-            <Button
-                android:id="@+id/buttonColorize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Colorize"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
-
-            <Button
-                android:id="@+id/buttonEqualization"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Equalization"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
-
-            <Button
-                android:id="@+id/buttonExtension"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Extand Dynamism"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
-
-            <Button
-                android:id="@+id/buttonConvolution"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Filters"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
-
-            <Button
-                android:id="@+id/buttonOverexposure"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Overexposure"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
-
-            <Button
-                android:id="@+id/buttonFusion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fusion"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
-
-        </LinearLayout>
-    </HorizontalScrollView>
-
     <FrameLayout
         android:visibility="gone"
         android:id="@+id/background"
@@ -124,6 +62,103 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
         android:text="RESET"/>
+
+    <HorizontalScrollView
+        android:id="@+id/scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/buttonGray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Grayscale"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            <Button
+                android:id="@+id/buttonColorize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Colorize"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            <Button
+                android:id="@+id/buttonEqualization"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Equalization"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            <Button
+                android:id="@+id/buttonExtension"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extand Dynamism"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            <Button
+                android:id="@+id/buttonConvolution"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filters"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            <Button
+                android:id="@+id/buttonOverexposure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overexposure"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:elevation="0dp" />
+
+            <Button
+                android:id="@+id/buttonFusion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fusion"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            <Button
+                android:id="@+id/buttonIsolate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Isolate"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            <Button
+                android:id="@+id/buttonSepia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sepia"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+            <Button
+                android:id="@+id/buttonContrast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contrast"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <Button
+        android:text="Value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buttonReset"
+        android:layout_toRightOf="@+id/background"
+        android:layout_toEndOf="@+id/background"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:id="@+id/buttonValue" />
 
 
 </RelativeLayout>

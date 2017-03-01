@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
@@ -34,7 +35,10 @@ public class MainActivity extends AppCompatActivity{
     Uri photoURI;
     File photoCaptured;
     Context mainContext;
-    int chosenColor = 0;
+    private int hueValue=0;
+    private int colorValue=0;
+    private int sizeFilterValue=3;
+    private int typeFilterValue=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,10 @@ public class MainActivity extends AppCompatActivity{
         Button buttonOverexposure = (Button)findViewById(R.id.buttonOverexposure);
         Button buttonFusion = (Button)findViewById(R.id.buttonFusion);
         Button buttonRes = (Button)findViewById(R.id.buttonReset);
-
+        Button buttonValue = (Button)findViewById(R.id.buttonValue);
+        Button buttonIsolate = (Button)findViewById(R.id.buttonIsolate);
+        Button buttonSepia = (Button)findViewById(R.id.buttonSepia);
+        Button buttonContrast = (Button)findViewById(R.id.buttonContrast);
         FloatingActionsMenu menuActions = (FloatingActionsMenu)findViewById(R.id.actionsMenu);
         FloatingActionButton fabCamera = (FloatingActionButton)findViewById(R.id.fabCamera);
         FloatingActionButton fabGallerie = (FloatingActionButton)findViewById(R.id.fabGallerie);
@@ -110,7 +117,7 @@ public class MainActivity extends AppCompatActivity{
         buttonColorize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.colorize();
+                ImgProcessing.colorize(hueValue);
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -139,10 +146,44 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        buttonIsolate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImgProcessing.isolate();
+                Utils.updateImageView(image, imgView);
+            }
+        });
+
+        buttonSepia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImgProcessing.sepia();
+                Utils.updateImageView(image, imgView);
+            }
+        });
+
         buttonFusion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bitmap bitmapText = BitmapFactory.decodeResource(getResources(), R.mipmap.text);
+                ImgProcessing.fusion(bitmapText);
+                Utils.updateImageView(image, imgView);
+            }
+        });
 
+        buttonConvolution.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImgProcessing.convolution(sizeFilterValue,typeFilterValue);
+                Utils.updateImageView(image, imgView);
+            }
+        });
+
+        buttonContrast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImgProcessing.contrast(0);
+                Utils.updateImageView(image, imgView);
             }
         });
 
@@ -154,33 +195,14 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
-        LinearGradient linearGradient = new LinearGradient(0.f, 0.f, 600.f, 0.0f, new int[]{0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF, 0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF}, null, Shader.TileMode.CLAMP);
-        ShapeDrawable shape = new ShapeDrawable(new RectShape());
-        shape.getPaint().setShader(linearGradient);
-        /*
-
-        final SeekBar seekBarFont = (SeekBar) findViewById(R.id.seekbar_font);
-        seekBarFont.setProgressDrawable(shape);
-        seekBarFont.setMax(360);
-
-        seekBarFont.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        buttonValue.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    t.setText(String.valueOf(seekBar.getProgress()));
-                }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ValuePicker.class);
+                startActivityForResult(intent, Constants.PICKER_VALUE);
             }
         });
-        */
+
     }
 
 
@@ -240,6 +262,19 @@ public class MainActivity extends AppCompatActivity{
         }
         else if (requestCode == Constants.LOAD_IMAGE && resultCode == RESULT_CANCELED)
             Toast.makeText(mainContext, "Loading canceled.", Toast.LENGTH_SHORT).show();
+
+        //================== VALUE PICKER ===================//
+
+        if (requestCode == Constants.PICKER_VALUE && resultCode == RESULT_OK && resultCode == RESULT_OK && data != null){
+            hueValue = data.getIntExtra("hueValue",0);
+            System.out.println(">>>>>>>>>>>>>>>>>" + hueValue);
+            colorValue = data.getIntExtra("colorValue", 1);
+            System.out.println(">>>>>>>>>>>>>>>>>" + colorValue);
+            sizeFilterValue = data.getIntExtra("sizeFilterValue",2);
+            System.out.println(">>>>>>>>>>>>>>>>>" + hueValue);
+            typeFilterValue = data.getIntExtra("typeFilterValue", 3);
+            System.out.println(">>>>>>>>>>>>>>>>>" + hueValue);
+        }
     }
     /**
      * This method launches the camera and allows the user to capture a picture.
