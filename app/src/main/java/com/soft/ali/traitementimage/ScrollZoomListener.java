@@ -69,11 +69,21 @@ public class ScrollZoomListener implements View.OnTouchListener {
                 curX = motionEvent.getX();
                 curY = motionEvent.getY();
                 break;
+
             case MotionEvent.ACTION_POINTER_DOWN:
                 mode = Constants.MODE_ZOOM;
                 currentDistance2Fingers = getDistance2Fingers(motionEvent);
                 midPointX = getMidPointX(motionEvent);
                 midPointY = getMidPointY(motionEvent);
+                break;
+
+            case MotionEvent.ACTION_UP:
+                mode = Constants.MODE_NONE;
+                break;
+
+            case MotionEvent.ACTION_POINTER_UP:
+                mode = Constants.MODE_NONE;
+                break;
 
             case MotionEvent.ACTION_MOVE:
                 if (mode == Constants.MODE_SCROLL) {
