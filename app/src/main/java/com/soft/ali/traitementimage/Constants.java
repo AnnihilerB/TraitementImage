@@ -16,11 +16,11 @@ public class Constants {
     public static final int WRITE_PERMISSIONS = 43;
 
     //Convolution constants
-    public static final int AVERAGE = 50;
-    public static final int GAUSS = 51;
-    public static final int SOBEL = 52;
-    public static final int LAPLACE = 53;
-    public static final int LAPLACE2 = 54;
+    public static final int AVERAGE = 0;
+    public static final int GAUSS = 1;
+    public static final int SOBEL = 2;
+    public static final int LAPLACE = 3;
+    public static final int LAPLACE2 = 4;
 
     //Activity constants
     public static int LOAD_IMAGE = 1;

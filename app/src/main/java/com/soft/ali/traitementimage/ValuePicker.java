@@ -37,17 +37,18 @@ public class ValuePicker extends AppCompatActivity{
         final TextView hueValueText = (TextView) findViewById(R.id.textHueValue);
 
         final SeekBar seekBarColor = (SeekBar) findViewById(R.id.seekBarColor);
-        seekBarColor.setMax(300);
-        LinearGradient linearGradient = new LinearGradient(0.f, 0.f, 600.f, 0.0f, new int[]{0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF, 0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF}, null, Shader.TileMode.CLAMP);
+        LinearGradient linearGradient = new LinearGradient(0.f, 0.f, 720.f, 0.0f, new int[]{0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF, 0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF}, null, Shader.TileMode.CLAMP);
         ShapeDrawable shape = new ShapeDrawable(new RectShape());
         shape.getPaint().setShader(linearGradient);
         seekBarColor.setProgressDrawable(shape);
+        seekBarColor.setMax(256*7-1);
 
         final SeekBar seekBarSizeFilter = (SeekBar) findViewById(R.id.seekBarSizeFilter);
         final TextView sizeFilterValueText = (TextView) findViewById(R.id.textSizeFilterValue);
 
         final SeekBar seekBarTypeFilter = (SeekBar) findViewById(R.id.seekBarTypeFilter);
         final TextView typeFilterValueText = (TextView) findViewById(R.id.textTypeFilterValue);
+
 
         seekBarHue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -112,8 +113,10 @@ public class ValuePicker extends AppCompatActivity{
         seekBarSizeFilter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sizeFilterValueText.setText(String.valueOf(seekBar.getProgress()));
-                sizeFilterValue = progress;
+                if ( progress % 2 == 1) {
+                    sizeFilterValue = progress;
+                    sizeFilterValueText.setText(String.valueOf(seekBar.getProgress()));
+                }
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -127,7 +130,7 @@ public class ValuePicker extends AppCompatActivity{
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 typeFilterValueText.setText(String.valueOf(seekBar.getProgress()));
-                typeFilterValue = progress;
+                typeFilterValue = seekBarTypeFilter.getProgress();
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {

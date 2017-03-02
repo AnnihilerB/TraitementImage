@@ -24,7 +24,7 @@ public class ImgProcessing {
         for (int i = 0; i < pixels.length; ++i) {
 
             Color.colorToHSV(pixels[i], hsv);
-            hsv[Constants.HSV_HUE] = (float) chosencolor
+            hsv[Constants.HSV_HUE] = (float) chosencolor;
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
@@ -62,17 +62,20 @@ public class ImgProcessing {
      *extension dynamique via la lut
      */
     public static void extensionDynamique() {
+        int channel = Constants.HSV_VIBRANCE;
         //La faire en HSV et ne pas toucher la teinte. Faire l'extension sur S puis repasser en RGB.
         int pixels[] = image.getArraypixel();
         float[] hsv = new float[3];
         LUT lut = new LUT();
         //initialisation de la LUT
-        lut.generateHSV(image, Constants.HSV_SATURATION);
+        lut.generateHSV(image, channel);
         //calcul de la transformation et application à l'image
         for (int i = 0; i <pixels.length; i++) {
             Color.colorToHSV(pixels[i],hsv);
-            pixels[i]=lut.getValueAt(pixels[i]);
-            pixels[i]=Color.HSVToColor(hsv);
+            int value = (int)(hsv[channel] *255);
+            float res = (lut.getValueAt(value)) / 255;
+            hsv[channel] = res;
+            pixels[i]= Color.HSVToColor(hsv);
         }
     }
 
@@ -202,10 +205,9 @@ public class ImgProcessing {
         }
     }
 
-    public static void isolate() {
+    public static void isolate(int colorValue) {
 
-        int chosencolor = Color.RED;
-        int limit = 200;
+        int limit = 150;
 
         int canalgrey;
         double valred = 0.3;
@@ -215,14 +217,15 @@ public class ImgProcessing {
 
         int pixels[] = image.getArraypixel();
 
-        for(int i=0; i<pixels.length; i++){
-            distance = (int)(Math.sqrt(Math.pow((Color.red(chosencolor)-Color.red(pixels[i])),2)+Math.pow((Color.green(chosencolor)-Color.green(pixels[i])),2)+Math.pow((Color.blue(chosencolor)-Color.blue(pixels[i])),2)));
-            if(distance >= limit) {
+        for (int i = 0; i < pixels.length; i++) {
+            distance = (int) (Math.sqrt(Math.pow((Color.red(colorValue) - Color.red(pixels[i])), 2) + Math.pow((Color.green(colorValue) - Color.green(pixels[i])), 2) + Math.pow((Color.blue(colorValue) - Color.blue(pixels[i])), 2)));
+            if (distance >= limit) {
                 canalgrey = (int) ((Color.red(pixels[i]) * valred) + (Color.green(pixels[i]) * valgreen) + (Color.blue(pixels[i]) * valblue));
                 pixels[i] = Color.rgb(canalgrey, canalgrey, canalgrey);
             }
 
         }
+    }
 
     public static void sepia(){
 
@@ -278,110 +281,6 @@ public class ImgProcessing {
             }
         }
     }
-
-    public static void contrast (int typeContrast) {
-
-        int max = 0;
-        int min = 255;
-        int temp;
-        int intervalLimit = 180;
-        int canalgrey;
-        double valred = 0.3;
-        double valgreen = 0.59;
-        double valblue = 0.11;
-        int tempred;
-        int tempgreen;
-        int tempblue;
-        int minred = 0;
-        int maxred = 255;
-        int mingreen = 0;
-        int maxgreen = 255;
-        int minblue = 0;
-        int maxblue = 255;
-
-        int pixels[] = image.getArraypixel();
-
-        //Increase Contrast Grey
-        if (typeContrast == Constants.INCREASE_GREY) {
-
-            toGray();
-
-            for (int i = 0; i < pixels.length; i++) {
-                temp = Color.red(pixels[i]);
-                if (temp < min) {
-                    min = temp;
-                }
-                if (temp > max) {
-                    max = temp;
-                }
-            }
-
-            for (int i = 0; i < pixels.length; i++) {
-                temp = ((255 * (Color.red(pixels[i]) - min)) / (max - min));
-                pixels[i] = Color.rgb(temp, temp, temp);
-            }
-        }
-
-        //Decreasecontrastegrey
-        if (typeContrast == Constants.DECREASE_GREY) {
-
-            toGray();
-
-            for (int i = 0; i < pixels.length; i++) {
-                temp = Color.red(pixels[i]);
-                if (temp < min) {
-                    min = temp;
-                }
-                if (temp > max) {
-                    max = temp;
-                }
-            }
-
-            for (int i = 0; i < pixels.length; i++) {
-                temp = ((intervalLimit * (Color.red(pixels[i]) - min)) / (max - min));
-                pixels[i] = Color.rgb(temp, temp, temp);
-            }
-        }
-
-        //Increasecontrastcolor
-
-        if(typeContrast == Constants.INCREASE_COLOR) {
-
-            for (int i = 0; i < pixels.length; i++) {
-                tempred = Color.red(pixels[i]);
-                if (tempred < minred) {
-                    minred = tempred;
-                }
-                if (tempred > maxred) {
-                    maxred = tempred;
-                }
-
-                tempgreen = Color.green(pixels[i]);
-                if (tempgreen < mingreen) {
-                    mingreen = tempgreen;
-                }
-                if (tempgreen > maxgreen) {
-                    maxgreen = tempgreen;
-                }
-
-                tempblue = Color.blue(pixels[i]);
-                if (tempblue < minblue) {
-                    minblue = tempblue;
-                }
-                if (tempblue > maxblue) {
-                    maxblue = tempblue;
-                }
-            }
-
-            for (int i = 0; i < pixels.length; i++) {
-                tempred = ((255 * (Color.red(pixels[i]) - minred)) / (maxred - minred));
-                tempgreen = ((255 * (Color.green(pixels[i]) - mingreen)) / (maxgreen - mingreen));
-                tempblue = ((255 * (Color.blue(pixels[i]) - minblue)) / (maxblue - minblue));
-                pixels[i] = Color.rgb(tempred, tempgreen, tempblue);
-            }
-        }
-    }
-
 
     public static void setImage(Img imagebase){
         image = imagebase;

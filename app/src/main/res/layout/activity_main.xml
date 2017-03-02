@@ -13,57 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="matrix"
-        android:src="@drawable/lena_color"/>
-
-    <FrameLayout
-        android:visibility="gone"
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#90000000">
-    </FrameLayout>
-
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/actionsMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        app:fab_addButtonColorNormal="@color/colorPrimaryDark"
-        app:fab_addButtonColorPressed="#6497b1"
-        app:fab_icon="@android:drawable/ic_menu_add"
-        app:fab_size="mini"
-        app:fab_expandDirection="up"
-        app:fab_labelsPosition="left">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabGallerie"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_icon="@android:drawable/ic_menu_gallery"
-            app:fab_title="Gallerie"/>
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabCamera"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_icon="@android:drawable/ic_menu_camera"
-            app:fab_title="Appareil photo"/>
+        android:src="@drawable/poivron"/>
 
 
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
-    <Button
-        android:id="@+id/buttonReset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:text="RESET"/>
 
     <HorizontalScrollView
         android:id="@+id/scroll"
@@ -141,26 +94,65 @@
                 android:text="Sepia"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"/>
 
-            <Button
-                android:id="@+id/buttonContrast"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Contrast"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
-
         </LinearLayout>
     </HorizontalScrollView>
 
     <Button
-        android:text="Value"
+    android:id="@+id/buttonReset"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="16dp"
+    android:text="RESET"/>
+
+    <Button
+        android:id="@+id/buttonValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/buttonReset"
-        android:layout_toRightOf="@+id/background"
-        android:layout_toEndOf="@+id/background"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:id="@+id/buttonValue" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:text="value"/>
 
+    <FrameLayout
+        android:visibility="gone"
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#90000000">
+    </FrameLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/actionsMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        app:fab_addButtonColorNormal="@color/colorPrimaryDark"
+        app:fab_addButtonColorPressed="#6497b1"
+        app:fab_icon="@android:drawable/ic_menu_add"
+        app:fab_size="mini"
+        app:fab_expandDirection="up"
+        app:fab_labelsPosition="left">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabGallerie"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_icon="@android:drawable/ic_menu_gallery"
+            app:fab_title="Gallerie"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabCamera"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_icon="@android:drawable/ic_menu_camera"
+            app:fab_title="Appareil photo"/>
+
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>

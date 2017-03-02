@@ -1,6 +1,7 @@
 package com.soft.ali.traitementimage;
 
 import android.graphics.Color;
+import android.util.Log;
 
 /**
  * Created by ali on 10/02/2017.
@@ -10,43 +11,52 @@ public class LUT {
 
     private static final int CONTRAST = 255;
 
-    private  int[] table;
-    private int min = 255;
-    private int max = 0;
-
+    private  float[] table;
+    private float min;
+    private float max;
     public LUT(){
-        table = new int[Constants.NBCOLORS];
+        table = new float[Constants.NBCOLORS];
     }
 
-    public int getValueAt(int index){
-     return table[index];
+    public float getValueAt(int index){
+        return table[index];
     }
 
-    public void generate(Img image){
-        float[] hsv = new float[3];
+    public void generateHSV(Img image, int channel){
         int[] pixels = image.getArraypixel();
 
-        dynamique(pixels);
+        dynamiqueHSV(pixels);
 
         for (int i = 0; i < table.length; i++){
-            Color.colorToHSV(pixels[i], hsv);
-            table[i] = getExtensionValue((int)hsv[Constants.HSV_SATURATION]);
+            table[i]= getExtensionValue(i);
         }
+        Log.i("LUT", "generateHSV: ");
     }
 
-    public int getExtensionValue(int value){
-        return ( CONTRAST * (value - min) ) / (max - min);
+    public float getExtensionValue(int value){
+        return ((value - min) ) / (max - min);
     }
 
-    private void dynamique(int[] pixels){
+    private void dynamiqueHSV(int[] pixels){
 
-        float[] hsv = new float[3];
+        float minR= 255;
+        float minG= 255;
+        float minB= 255;
+        float maxR = 0;
+        float maxG = 0;
+        float maxB = 0;
 
         for (int i = 0; i< pixels.length; i++){
-            Color.colorToHSV(pixels[i], hsv);
-            min = Math.min(min, (int)hsv[Constants.HSV_SATURATION]);
-            max = Math.max(max, (int)hsv[Constants.HSV_SATURATION]);
+            minR = Math.min(minR, Color.red(pixels[i]));
+            minG = Math.min(minG, Color.green(pixels[i]));
+            minB = Math.min(minB, Color.blue(pixels[i]));
+
+            maxR = Math.max(maxR, Color.red(pixels[i]));
+            maxG = Math.max(maxG, Color.green(pixels[i]));
+            maxB = Math.max(maxB, Color.blue(pixels[i]));
         }
+        min =((minR+minG+minB) / 3)/(float)255;
+        max = ((maxR+maxG+maxB) / 3)/(float)255;
     }
 
 

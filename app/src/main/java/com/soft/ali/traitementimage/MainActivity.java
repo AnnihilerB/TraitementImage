@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,11 +30,11 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity{
 
-    Img image;
-    ImgView imgView;
-    Uri photoURI;
-    File photoCaptured;
-    Context mainContext;
+    private Img image;
+    private  ImgView imgView;
+    private Uri photoURI;
+    private File photoCaptured;
+    private Context mainContext;
     private int hueValue=0;
     private int colorValue=0;
     private int sizeFilterValue=3;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity{
         mainContext = getApplicationContext();
 
         //Creating a blank image.
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena_color);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.poivron);
         image = new Img(bitmap);
         ImgProcessing.setImage(image);
         imgView = (ImgView)findViewById(R.id.iv);
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity{
         Button buttonValue = (Button)findViewById(R.id.buttonValue);
         Button buttonIsolate = (Button)findViewById(R.id.buttonIsolate);
         Button buttonSepia = (Button)findViewById(R.id.buttonSepia);
-        Button buttonContrast = (Button)findViewById(R.id.buttonContrast);
 
         FloatingActionsMenu menuActions = (FloatingActionsMenu)findViewById(R.id.actionsMenu);
         FloatingActionButton fabCamera = (FloatingActionButton)findViewById(R.id.fabCamera);
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity{
         buttonIsolate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.isolate();
+                ImgProcessing.isolate(colorValue);
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity{
         buttonConvolution.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.convolution(3, Constants.SOBEL);
+                ImgProcessing.convolution(sizeFilterValue, typeFilterValue);
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -186,14 +186,6 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View view) {
                 image.resetArrayPixels();
                 imgView.setImageBitmap(image.getOriginalBitmap());
-            }
-        });
-
-        buttonContrast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ImgProcessing.contrast(0);
-                Utils.updateImageView(image, imgView);
             }
         });
 
@@ -273,9 +265,9 @@ public class MainActivity extends AppCompatActivity{
             colorValue = data.getIntExtra("colorValue", 1);
             System.out.println(">>>>>>>>>>>>>>>>>" + colorValue);
             sizeFilterValue = data.getIntExtra("sizeFilterValue",2);
-            System.out.println(">>>>>>>>>>>>>>>>>" + hueValue);
+            System.out.println(">>>>>>>>>>>>>>>>>" + sizeFilterValue);
             typeFilterValue = data.getIntExtra("typeFilterValue", 3);
-            System.out.println(">>>>>>>>>>>>>>>>>" + hueValue);
+            System.out.println(">>>>>>>>>>>>>>>>>" + typeFilterValue);
         }
 
     }
