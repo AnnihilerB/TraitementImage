@@ -56,5 +56,10 @@ public class Constants {
     public static final int INCREASE_GREY=0;
     public static final int DECREASE_GREY=1;
     public static final int INCREASE_COLOR =2;
+	
+	 //Gallery Choice mode constants
+    public static final int GALLERY_NORMAL = 60;
+    public static final int GALLERY_SECOND_IMAGE =61;
+
 
 }

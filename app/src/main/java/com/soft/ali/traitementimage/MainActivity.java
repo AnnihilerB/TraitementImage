@@ -31,6 +31,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity{
 
     private Img image;
+	private Img imageHide; 
     private  ImgView imgView;
     private Uri photoURI;
     private File photoCaptured;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity{
         //Creating a blank image.
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.poivron);
         image = new Img(bitmap);
+		imageHide = new Img();
         ImgProcessing.setImage(image);
         imgView = (ImgView)findViewById(R.id.iv);
         imgView.setOnTouchListener(new ScrollZoomListener());
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity{
         Button buttonValue = (Button)findViewById(R.id.buttonValue);
         Button buttonIsolate = (Button)findViewById(R.id.buttonIsolate);
         Button buttonSepia = (Button)findViewById(R.id.buttonSepia);
+		Button buttonHide = (Button) findViewById(R.id.buttonImgHide);
 
         FloatingActionsMenu menuActions = (FloatingActionsMenu)findViewById(R.id.actionsMenu);
         FloatingActionButton fabCamera = (FloatingActionButton)findViewById(R.id.fabCamera);
@@ -101,7 +104,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 checkPermissions();
-                startGallery();
+                startGallery(Constants.GALLERY_NORMAL);
             }
         });
 
@@ -196,6 +199,17 @@ public class MainActivity extends AppCompatActivity{
                 startActivityForResult(intent, Constants.PICKER_VALUE);
             }
         });
+		
+		buttonHide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startGallery(Constants.GALLERY_SECOND_IMAGE);
+                if (checkPicturesSize(image,imageHide)){
+					ImgProcessing.hideImageToAnother(imageHide);
+                    Utils.updateImageView(image, imgView);
+                }
+            }
+        });
     }
 
 
@@ -255,6 +269,22 @@ public class MainActivity extends AppCompatActivity{
         }
         else if (requestCode == Constants.LOAD_IMAGE && resultCode == RESULT_CANCELED)
             Toast.makeText(mainContext, "Loading canceled.", Toast.LENGTH_SHORT).show();
+		
+		// LOADING SECOND IMAGE FOR HIDE PIC TO ANOTHER ONE
+		if (requestCode == Constants.LOAD_IMAGE_SECOND && resultCode == RESULT_OK  && data != null){
+            Uri uri = data.getData();
+            try {
+                imageHide.clearMemory();
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                imageHide = new Img(bitmap);
+            } catch (IOException e) {
+                Toast.makeText(mainContext, "Error getting bitmap from storage.", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
+        else if (requestCode == Constants.LOAD_IMAGE_SECOND && resultCode == RESULT_CANCELED)
+            Toast.makeText(mainContext, "Loading canceled.", Toast.LENGTH_SHORT).show();
+			
 
 
         //================== VALUE PICKER ===================//
@@ -280,11 +310,18 @@ public class MainActivity extends AppCompatActivity{
         startActivityForResult(cam, Constants.REQUEST_CAPTURE);
     }
 
-    public void startGallery (){
+ 
+	public void startGallery (int choice){
         // Create the Intent for Image Gallery.
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
-        startActivityForResult(i, Constants.LOAD_IMAGE);
+        switch (choice){
+            case Constants.GALLERY_NORMAL :
+                startActivityForResult(i, Constants.LOAD_IMAGE);
+                break;
+            case Constants.GALLERY_SECOND_IMAGE :
+                startActivityForResult(i, Constants.LOAD_IMAGE_SECOND);
+        }
     }
 
     /**
@@ -304,8 +341,18 @@ public class MainActivity extends AppCompatActivity{
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constants.WRITE_PERMISSIONS);
         }
     }
+	
+			
+	/**
+     *
+     * @param image
+     * @param imageToHide
+     * @return
+     */
+    private boolean checkPicturesSize(Img image, Img imageToHide){
+        return ((image.getHeight()== imageToHide.getHeight()) & (image.getWidth() == imageToHide.getWidth()));
+
+    }
+
 
 }
-
-
-
