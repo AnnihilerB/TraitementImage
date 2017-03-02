@@ -2,6 +2,7 @@ package com.soft.ali.traitementimage;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 /**
  * Created by ali on 27/01/2017.
@@ -67,7 +68,7 @@ public class ImgProcessing {
         float[] hsv = new float[3];
         LUT lut = new LUT();
         //initialisation de la LUT
-        lut.generate(image);
+        lut.generateHSV(image, Constants.HSV_SATURATION);
         //calcul de la transformation et application à l'image
         for (int i = 0; i <pixels.length; i++) {
             Color.colorToHSV(pixels[i],hsv);
@@ -108,16 +109,29 @@ public class ImgProcessing {
         }
 
         if(typeFilter == Constants.GAUSS){
-            double sigma = 0.8;
+            float sigma = (float)0.8;
             filter.setGauss(sigma);
             calculConvolution(filter.getFilter(), filter.getsizefilter());
         }
 
         if(typeFilter == Constants.SOBEL){
-            filter.setSobelHorizontal();
-            calculConvolution(filter.getFilter(), filter.getsizefilter());
             filter.setSobelVertical();
             calculConvolution(filter.getFilter(), filter.getsizefilter());
+           int[] pixelHorizontal= image.getArraypixel().clone();
+            filter.setSobelVertical();
+            calculConvolution(filter.getFilter(), filter.getsizefilter());
+            int[] pixelVertical = image.getArraypixel().clone();
+
+            int[]pixels = image.getArraypixel();
+            int r,g,b;
+            for (int i =0; i < pixelHorizontal.length; i++){
+                r = (int) (Math.sqrt(Math.pow(Color.red(pixelHorizontal[i]),2) + Math.pow(Color.red(pixelVertical[i]), 2)));
+                g = (int) (Math.sqrt(Math.pow(Color.green (pixelHorizontal[i]),2) + Math.pow(Color.green(pixelVertical[i]), 2)));
+                b = (int) (Math.sqrt(Math.pow(Color.blue(pixelHorizontal[i]),2) + Math.pow(Color.blue(pixelVertical[i]), 2)));
+                pixels[i] = Color.rgb(r,g,b);
+            }
+            Log.i("PD", "convolution: ");
+
         }
 
         if(typeFilter == Constants.LAPLACE){
@@ -131,23 +145,51 @@ public class ImgProcessing {
         }
     }
 
-    private static void calculConvolution(int [][] filtermatrix, int sizefilter) {
-
+    private static void calculConvolution(float [][] filtermatrix, int sizefilter) {
         int pixels[] = image.getArraypixel();
         int originalpixels[]=pixels.clone();
 
-        if(sizefilter == 3) {
-            for (int i = 1; i < pixels.length; i++) {
-                pixels[i]=(originalpixels[i-1-image.getWidth()]*filtermatrix[0][0])
-                        +(originalpixels[i-image.getWidth()]*filtermatrix[0][1])
-                        +(originalpixels[i+1-image.getWidth()]*filtermatrix[0][2])
-                        +(originalpixels[i-1]*filtermatrix[1][0])
-                        +(originalpixels[i]*filtermatrix[1][1])
-                        +(originalpixels[i+1]*filtermatrix[1][2])
-                        +(originalpixels[i-1+image.getWidth()]*filtermatrix[2][0])
-                        +(originalpixels[i+image.getWidth()]*filtermatrix[2][1])
-                        +(originalpixels[i+1+image.getWidth()]*filtermatrix[2][2]);
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int index = width+ 1;
+
+        int r, g, b;
+
+        for (int i = 1; i <  height- 1; i++){
+            for (int j = 1; j < width - 1; j++){
+                r =(int)((Color.red(originalpixels[index-1-width]) * filtermatrix[0][0])
+                        +(Color.red(originalpixels[index-width])* filtermatrix[0][1])
+                        +(Color.red(originalpixels[index+1-width])* filtermatrix[0][2])
+                        +(Color.red(originalpixels[index-1])* filtermatrix[1][0])
+                        +(Color.red(originalpixels[index])* filtermatrix[1][1])
+                        +(Color.red(originalpixels[index+1])* filtermatrix[1][2])
+                        +(Color.red(originalpixels[index-1+width])* filtermatrix[2][0])
+                        +(Color.red(originalpixels[index+width])* filtermatrix[2][1])
+                        +(Color.red(originalpixels[index+1+width]))* filtermatrix[2][2]);
+                g =(int)((Color.green(originalpixels[index-1-width]) * filtermatrix[0][0])
+                        +(Color.green(originalpixels[index-width])* filtermatrix[0][1])
+                        +(Color.green(originalpixels[index+1-width])* filtermatrix[0][2])
+                        +(Color.green(originalpixels[index-1])* filtermatrix[1][0])
+                        +(Color.green(originalpixels[index])* filtermatrix[1][1])
+                        +(Color.green(originalpixels[index+1])* filtermatrix[1][2])
+                        +(Color.green(originalpixels[index-1+width])* filtermatrix[2][0])
+                        +(Color.green(originalpixels[index+width])* filtermatrix[2][1])
+                        +(Color.green(originalpixels[index+1+width]))* filtermatrix[2][2]);
+                b =(int)((Color.blue(originalpixels[index-1-width]) * filtermatrix[0][0])
+                        +(Color.blue(originalpixels[index-width])* filtermatrix[0][1])
+                        +(Color.blue(originalpixels[index+1-width])* filtermatrix[0][2])
+                        +(Color.blue(originalpixels[index-1])* filtermatrix[1][0])
+                        +(Color.blue(originalpixels[index])* filtermatrix[1][1])
+                        +(Color.blue(originalpixels[index+1])* filtermatrix[1][2])
+                        +(Color.blue(originalpixels[index-1+width])* filtermatrix[2][0])
+                        +(Color.blue(originalpixels[index+width])* filtermatrix[2][1])
+                        +(Color.blue(originalpixels[index+1+width]))* filtermatrix[2][2]);
+
+                pixels[index] = Color.rgb(r,g,b);
+
+                index++;
             }
+            index += 2;
         }
     }
 

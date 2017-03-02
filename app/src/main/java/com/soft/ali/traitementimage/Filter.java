@@ -1,19 +1,21 @@
 package com.soft.ali.traitementimage;
 
+import android.util.Log;
+
 /**
  * Created by Valentin on 17/02/2017.
  */
 
 public class Filter {
-    private int filter [] [];
+    private float filter [] [];
     private int sizefilter;
 
     public Filter (int nfilter){
         sizefilter=nfilter;
-        filter = new int[sizefilter] [sizefilter];
+        filter = new float[sizefilter] [sizefilter];
     }
 
-    public int[][] getFilter(){
+    public float[][] getFilter(){
         return filter;
     }
 
@@ -24,7 +26,7 @@ public class Filter {
     public void setAverage(){
         for(int i=0; i<sizefilter; i++){
             for(int j=0; j<sizefilter; j++){
-                filter[i][j]=1/(sizefilter*sizefilter);
+                filter[i][j]=1/(float)(sizefilter*sizefilter);
             }
         }
     }
@@ -52,19 +54,32 @@ public class Filter {
             indice [7][1] = 1;
             indice [8][0] = 1;
             indice [8][1] = 1;
+
+            float ratio = 0;
+            float fraction = 1/(float)(2*Math.PI*sigma*sigma);
+
             for(int i=0; i<sizefilter;i++){
                 for(int j=0; j<sizefilter; j++){
-                    filter[i][j] = (int)((1/(2*Math.PI*sigma*sigma))*Math.exp((indice[numIndice][0]*indice[numIndice][0]+indice[numIndice][1]*indice[numIndice][1])/(2*sigma*sigma)));
+
+                    float exp = (float)Math.exp(-( (indice[numIndice][0]*indice[numIndice][0] +indice[numIndice][1]*indice[numIndice][1])  / ((2*sigma*sigma))     ));
+                    float calcul = fraction *exp;
+
+                    if (i == 0 && j == 0){
+                        ratio = 1/calcul;
+                    }
+                    filter[i][j] = calcul;
                     numIndice++;
-                    totalValue=totalValue + filter [i][j];
+                    filter[i][j] = Math.round(filter[i][j]* ratio);
+                    totalValue=totalValue + Math.round(filter [i][j]);
                 }
             }
             for(int i=0; i<sizefilter; i++){
                 for(int j=0; j<sizefilter; j++){
-                    filter[i][j]=1/(totalValue);
+                    filter[i][j] *=1/(float)(totalValue);
                 }
             }
         }
+        Log.i("BOUH", "setGauss: ");
     }
 
     public void setSobelVertical(){
@@ -92,6 +107,9 @@ public class Filter {
     }
 
     public void setLaplace(){
+        setGauss(0.8);
+        for (int i = 0; i <5; i++)
+            ImgProcessing.convolution(3, Constants.GAUSS);
         filter[0][0]= 0;
         filter[0][1]= 1;
         filter[0][2]= 0;
@@ -104,6 +122,9 @@ public class Filter {
     }
 
     public void setLaplace2(){
+        setGauss(0.8);
+        for (int i = 0; i <5; i++)
+            ImgProcessing.convolution(3, Constants.GAUSS);
         filter[0][0]= 1;
         filter[0][1]= 1;
         filter[0][2]= 1;
