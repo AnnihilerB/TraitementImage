@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <SeekBar
+        android:id="@+id/seekBarHue"
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"
+        android:max="360"
+        android:progress="0"
+        android:layout_marginTop="17dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"></SeekBar>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textColorValue"
+        android:layout_below="@+id/seekBarColor"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Size Filter :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textColorValue"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textSizeFilter" />
+
+    <TextView
+        android:text="Hue Value :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textHue"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textHueValue"
+        android:layout_below="@+id/seekBarHue"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Color :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textColor"
+        android:layout_below="@+id/textHueValue"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <SeekBar
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarColor"
+        android:max="600"
+        android:progress="0"
+        android:layout_below="@+id/textColor"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <SeekBar
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textSizeFilter"
+        android:layout_toRightOf="@+id/textColorValue"
+        android:layout_toEndOf="@+id/textColorValue"
+        android:id="@+id/seekBarSizeFilter"
+        android:max="9"
+        android:progress="3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBarSizeFilter"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textSizeFilterValue" />
+
+    <TextView
+        android:text="TypeFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textSizeFilterValue"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textTypeFilter" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBarTypeFilter"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textTypeFilterValue" />
+
+    <Button
+        android:text="OK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonOK"
+        android:layout_marginBottom="33dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/textTypeFilterValue"
+        android:layout_toEndOf="@+id/textTypeFilterValue"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp" />
+
+    <SeekBar
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarTypeFilter"
+        android:layout_below="@+id/textTypeFilter"
+        android:layout_toRightOf="@+id/textTypeFilterValue"
+        android:layout_toEndOf="@+id/textTypeFilterValue"
+        android:max="5"
+        android:progress="1" />
+
+</RelativeLayout>
