@@ -113,10 +113,9 @@ public class ValuePicker extends AppCompatActivity{
         seekBarSizeFilter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if ( progress % 2 == 1) {
-                    sizeFilterValue = progress;
-                    sizeFilterValueText.setText(String.valueOf(seekBar.getProgress()));
-                }
+                sizeFilterValue = progress;
+                sizeFilterValueText.setText(String.valueOf(seekBar.getProgress()));
+
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -148,12 +147,6 @@ public class ValuePicker extends AppCompatActivity{
                 result.putExtra("colorValue", colorValue);
                 result.putExtra("sizeFilterValue", sizeFilterValue);
                 result.putExtra("typeFilterValue", typeFilterValue);
-
-                System.out.println("!!!!!!!!!!!!!!" + hueValue);
-                System.out.println("!!!!!!!!!!!!!!" + colorValue);
-                System.out.println("!!!!!!!!!!!!!!" + sizeFilterValue);
-                System.out.println("!!!!!!!!!!!!!!" + typeFilterValue);
-
                 setResult(RESULT_OK, result);
                 finish();
             }

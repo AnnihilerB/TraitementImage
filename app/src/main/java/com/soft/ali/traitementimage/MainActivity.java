@@ -261,13 +261,6 @@ public class MainActivity extends AppCompatActivity{
 
         if (requestCode == Constants.PICKER_VALUE && resultCode == RESULT_OK && resultCode == RESULT_OK && data != null){
             hueValue = data.getIntExtra("hueValue",0);
-            System.out.println(">>>>>>>>>>>>>>>>>" + hueValue);
-            colorValue = data.getIntExtra("colorValue", 1);
-            System.out.println(">>>>>>>>>>>>>>>>>" + colorValue);
-            sizeFilterValue = data.getIntExtra("sizeFilterValue",2);
-            System.out.println(">>>>>>>>>>>>>>>>>" + sizeFilterValue);
-            typeFilterValue = data.getIntExtra("typeFilterValue", 3);
-            System.out.println(">>>>>>>>>>>>>>>>>" + typeFilterValue);
         }
 
     }
