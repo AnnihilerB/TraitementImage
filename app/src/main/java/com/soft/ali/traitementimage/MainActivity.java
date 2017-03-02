@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
@@ -45,8 +46,10 @@ public class MainActivity extends AppCompatActivity{
         mainContext = getApplicationContext();
 
         //Creating a blank image.
-        image = new Img();
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena_color);
+        image = new Img(bitmap);
         imgView = (ImgView)findViewById(R.id.iv);
+        ImgProcessing.setImage(image);
         imgView.setOnTouchListener(new ScrollZoomListener());
 
         //Button initialization.
@@ -96,9 +99,6 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
-
-
         buttonGray.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,6 +143,14 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 
+            }
+        });
+
+        buttonConvolution.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImgProcessing.convolution(3, Constants.SOBEL);
+                Utils.updateImageView(image, imgView);
             }
         });
 

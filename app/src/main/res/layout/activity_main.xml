@@ -12,7 +12,8 @@
         android:id="@+id/iv"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:scaleType="matrix" />
+        android:scaleType="matrix"
+        android:src="@drawable/lena_color"/>
 
     <HorizontalScrollView
         android:id="@+id/scroll"
