@@ -79,7 +79,6 @@ public class Filter {
                 }
             }
         }
-        Log.i("BOUH", "setGauss: ");
     }
 
     public void setSobelVertical(){

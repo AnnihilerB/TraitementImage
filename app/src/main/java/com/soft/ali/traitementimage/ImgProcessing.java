@@ -117,7 +117,7 @@ public class ImgProcessing {
         }
 
         if(typeFilter == Constants.SOBEL){
-            filter.setSobelVertical();
+            filter.setSobelHorizontal();
             calculConvolution(filter.getFilter(), filter.getsizefilter());
             int[] pixelHorizontal= image.getArraypixel().clone();
             filter.setSobelVertical();

@@ -256,7 +256,10 @@ public class MainActivity extends AppCompatActivity{
         //================== VALUE PICKER ===================//
 
         if (requestCode == Constants.PICKER_VALUE && resultCode == RESULT_OK && resultCode == RESULT_OK && data != null){
-            hueValue = data.getIntExtra("hueValue",0);
+            hueValue = data.getIntExtra("hueValue",120);
+            colorValue = data.getIntExtra("colorValue", 120);
+            sizeFilterValue = data.getIntExtra("sizeFilterValue",3);
+            typeFilterValue = data.getIntExtra("typeFilterValue",Constants.GAUSS);
         }
 
     }
