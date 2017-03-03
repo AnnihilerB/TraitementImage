@@ -1,14 +1,8 @@
 package com.soft.ali.traitementimage;
 
-import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 
 /**
  * Created by ali on 28/01/2017.
@@ -23,23 +17,25 @@ import android.widget.ImageView;
 public class ScrollZoomListener implements View.OnTouchListener {
 
     //Postion of the first finger
-    float curX = 0;
-    float curY = 0;
+    private float curX = 0;
+    private float curY = 0;
 
     //On-screen location of the matrix
-    float posX, posY;
+    private float posX;
+    private float posY;
     //Width and height of the bitmap.
-    float width;
-    float height;
+    private float width;
+    private float height;
     //Saved matrix allows us to get the basic values.
-    Matrix savedMatrix = new Matrix();
-    Matrix matrix = new Matrix();
+    private Matrix savedMatrix = new Matrix();
+    private Matrix matrix = new Matrix();
 
-    int mode;
+    private int mode;
     //Distance when 2 fingers are on screen.
-    float currentDistance2Fingers;
+    private float currentDistance2Fingers;
 
-    float midPointX, midPointY;
+    private float midPointX;
+    private float midPointY;
 
     /**
      * Overriding the onTouch method allows to handle zooming and scrolling on an image.

@@ -23,7 +23,7 @@ public class Constants {
     public static final int LAPLACE2 = 4;
 
     //Activity constants
-    public static int LOAD_IMAGE = 1;
+    public static final int LOAD_IMAGE = 1;
     public static final int REQUEST_CAPTURE = 2;
     public static  final int WRITE_IMAGE = 3;
     public static  final int PICKER_VALUE = 4;
@@ -51,10 +51,5 @@ public class Constants {
     public static final int MODE_ZOOM=21;
     public static final int MODE_SCROLL =22;
     public static final int MODE_NONE = 20;
-
-    //Contrast constants
-    public static final int INCREASE_GREY=0;
-    public static final int DECREASE_GREY=1;
-    public static final int INCREASE_COLOR =2;
 
 }

@@ -68,7 +68,7 @@ public class ImgProcessing {
         float[] hsv = new float[3];
         LUT lut = new LUT();
         //initialisation de la LUT
-        lut.generateHSV(image, channel);
+        lut.generateHSV(image);
         //calcul de la transformation et application à l'image
         for (int i = 0; i <pixels.length; i++) {
             Color.colorToHSV(pixels[i],hsv);

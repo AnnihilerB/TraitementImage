@@ -1,9 +1,6 @@
 package com.soft.ali.traitementimage;
 
 import android.graphics.Color;
-import android.util.Log;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by ali on 11/02/2017.

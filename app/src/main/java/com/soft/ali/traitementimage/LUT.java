@@ -9,8 +9,6 @@ import android.util.Log;
 
 public class LUT {
 
-    private static final int CONTRAST = 255;
-
     private  float[] table;
     private float min;
     private float max;
@@ -22,7 +20,7 @@ public class LUT {
         return table[index];
     }
 
-    public void generateHSV(Img image, int channel){
+    public void generateHSV(Img image){
         int[] pixels = image.getArraypixel();
 
         dynamiqueHSV(pixels);
@@ -33,7 +31,7 @@ public class LUT {
         Log.i("LUT", "generateHSV: ");
     }
 
-    public float getExtensionValue(int value){
+    private float getExtensionValue(int value){
         return ((value - min) ) / (max - min);
     }
 

@@ -7,11 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -280,7 +276,7 @@ public class MainActivity extends AppCompatActivity{
         startActivityForResult(cam, Constants.REQUEST_CAPTURE);
     }
 
-    public void startGallery (){
+    private void startGallery(){
         // Create the Intent for Image Gallery.
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
