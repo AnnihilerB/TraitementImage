@@ -132,8 +132,14 @@ public class ValuePicker extends AppCompatActivity{
         seekBarTypeFilter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                typeFilterValueText.setText(String.valueOf(seekBar.getProgress()));
                 typeFilterValue = seekBarTypeFilter.getProgress();
+                switch (typeFilterValue){
+                    case 0: typeFilterValueText.setText("Average");break;
+                    case 1: typeFilterValueText.setText("Gauss");break;
+                    case 2: typeFilterValueText.setText("Sobel");break;
+                    case 3: typeFilterValueText.setText("Laplace");break;
+                    case 4: typeFilterValueText.setText("Laplace2");break;
+                }
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
