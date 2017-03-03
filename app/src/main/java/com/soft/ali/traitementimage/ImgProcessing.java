@@ -96,13 +96,11 @@ public class ImgProcessing {
             pixels[i]=rgb;
         }
     }
-
+    /**
+     The user gives as parameter the size of the size of the filter and its type (average, gaussian...).
+     A Filter object is created, after that, in function of the type, a "set" method is called to fill the filter. Next the method "calculConvolution()" applied the filter on the picture.
+     */
     public static void convolution(int n, int typeFilter) {
-        /* Filtre de taille impaire toujours.
-        Pose le filtre sur l'imagee, le filtre calcule la valeur du pixel central en mulitipliant la valeur des pixels par la valeur du masque 1 à1.
-        premiere case pixel * premiere case masque etc..
-         */
-
         Filter filter = new Filter(n);
 
         if(typeFilter == Constants.AVERAGE){
@@ -145,7 +143,9 @@ public class ImgProcessing {
             calculConvolution(filter.getFilter(), filter.getsizefilter());
         }
     }
-
+    /**
+     * This method applied the filter on the chosen image, for the moment only the 3*3 matrix are functionnal. The edge of the picture are processed.
+     */
     private static void calculConvolution(float [][] filtermatrix, int sizefilter) {
         int pixels[] = image.getArraypixel();
         int originalpixels[] = pixels.clone();
@@ -193,7 +193,9 @@ public class ImgProcessing {
             index += 2;
         }
     }
-
+    /**
+     * This function increase the brightness value of all pixels of a picture by an arbitrary value.
+     */
     public static void overexposure () {
 
         float hsv[] = new float[3];
@@ -204,7 +206,10 @@ public class ImgProcessing {
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
-
+    /**
+     * This method isolate a color of an image.
+     * The user can choose the color he wants from the value picker.
+     */
     public static void isolate(int colorValue) {
 
         int limit = 150;
@@ -238,7 +243,6 @@ public class ImgProcessing {
         int canalblue;
 
         for(int i=0; i<pixels.length; i++){
-
             valred = 0.393;
             valgreen = 0.769;
             valblue = 0.189;
@@ -255,10 +259,13 @@ public class ImgProcessing {
             canalblue = (int) Math.min(255, ((Color.red(pixels[i])*valred)+(Color.green(pixels[i])*valgreen)+(Color.blue(pixels[i])*valblue)));
 
             pixels[i] = Color.rgb(canalred, canalgreen, canalblue);
-
         }
-
     }
+
+    /**
+     * Fusion between two pictures, one is a white picture with black text. The text image need to be smaller or equal to the other one.
+     * When a black pixel is detected in the array of the text picture, an average value of the two pixel is done.
+     */
 
     public static void fusion (Bitmap bitmapText) {
 
@@ -270,7 +277,7 @@ public class ImgProcessing {
 
         bitmapText.getPixels(pixelarraytext,0,widthtext,0,0,widthtext,heighttext);
 
-        if (pixelarraytext.length < pixels.length) {
+        if (pixelarraytext.length <= pixels.length) {
             for (int i = 0; i < pixelarraytext.length; i++) {
                 if (pixelarraytext[i] == Color.BLACK) {
                     moyred = (Color.red(pixels[i]) + Color.red(pixelarraytext[i])) / 2;
@@ -281,6 +288,61 @@ public class ImgProcessing {
             }
         }
     }
+
+    /**
+     * Hide a picture in another one ,we supposed both pics have same size
+     * @param imgToHide
+     */
+    public static void hideImageToAnother(Img imgToHide){
+        int red1, green1, blue1;
+        int red2, green2, blue2;
+        //variable to catch binary changes from both color rgb pictures
+        String binaryResult;
+        // array pixels of both pics : current pic and pic to hide
+        int[] pixels1 = image.getArraypixel();
+        int[] pixels2 = imgToHide.getArraypixel();
+        for(int i=0; i< pixels1.length; i++) {
+            //getting rgb colors from both pics
+            red1 = Color.red(pixels1[i]);
+            green1 = Color.green(pixels1[i]);
+            blue1 = Color.blue(pixels1[i]);
+
+            red2 = Color.red(pixels2[i]);
+            green2 = Color.green(pixels2[i]);
+            blue2 = Color.blue(pixels2[i]);
+            //getting fourth first byte from binary value of rgb colors and concat between both pics rgb colors
+            //put results in rgb arg of current pic
+            binaryResult = getFirstsBinaryValue(red1);
+            binaryResult.concat(getFirstsBinaryValue(red2));
+            red1 = Integer.parseInt(binaryResult, 2);
+            binaryResult = getFirstsBinaryValue(green1);
+            binaryResult.concat(getFirstsBinaryValue(green2));
+            green1 = Integer.parseInt(binaryResult, 2);
+            binaryResult = getFirstsBinaryValue(blue1);
+            binaryResult.concat(getFirstsBinaryValue(blue2));
+            blue1 = Integer.parseInt(binaryResult, 2);
+
+
+            //Evaluating new Rgb color of current pic pixel
+            pixels1[i] = Color.rgb(red1, green1, blue1);
+        }
+    }
+
+    /**
+     * Get fourth first byte of binary string of a rgb arg
+     * @param rgbArg
+     * @return
+     */
+    public static String getFirstsBinaryValue(int rgbArg){
+        String binaryString =Integer.toBinaryString(rgbArg);
+        System.out.println(binaryString);
+        return binaryString.substring(0,3);
+    }
+
+    public static void setImage(Img imagebase){
+        image = imagebase;
+    }
+
 
     public static void setImage(Img imagebase){
         image = imagebase;
