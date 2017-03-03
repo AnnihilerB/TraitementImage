@@ -59,17 +59,17 @@ public class ImgProcessing {
 
 
     /**
-     *extension dynamique via la lut
+     * Extending the image dynamism via a LUT.
+     * Each pixel is rescaled between 0 and 255 in order ro fit the LUT.
+     * A new pixel value is gathered from the LUT and scaled between 0 and 1.
+     * The extension is processed via the HSV colorspace.
      */
-    public static void extensionDynamique() {
+    public static void extendDynamism() {
         int channel = Constants.HSV_VIBRANCE;
-        //La faire en HSV et ne pas toucher la teinte. Faire l'extension sur S puis repasser en RGB.
         int pixels[] = image.getArraypixel();
         float[] hsv = new float[3];
         LUT lut = new LUT();
-        //initialisation de la LUT
         lut.generateHSV(image);
-        //calcul de la transformation et application à l'image
         for (int i = 0; i <pixels.length; i++) {
             Color.colorToHSV(pixels[i],hsv);
             int value = (int)(hsv[channel] *255);
@@ -143,8 +143,12 @@ public class ImgProcessing {
             calculConvolution(filter.getFilter(), filter.getsizefilter());
         }
     }
+
     /**
-     * This method applied the filter on the chosen image, for the moment only the 3*3 matrix are functionnal. The edge of the picture are processed.
+     * This method applied the filter on the chosen image, for the moment only the 3*3 matrix are functionnal.
+     * The edge of the picture are not processed.
+     * @param filtermatrix the filter to apply.
+     * @param sizefilter the size of the filer (odd number).
      */
     private static void calculConvolution(float [][] filtermatrix, int sizefilter) {
         int pixels[] = image.getArraypixel();
@@ -152,10 +156,13 @@ public class ImgProcessing {
 
         int width = image.getWidth();
         int height = image.getHeight();
+        //Index used to avoid edging pixels.
         int index = width + 1;
 
         int r, g, b;
 
+        //This loop avoids to process the edge of the image.
+        //The filter is applied on each RGB channel separately.
         for (int i = 1; i < height - 1; i++) {
             for (int j = 1; j < width - 1; j++) {
                 r = (int) ((Color.red(originalpixels[index - 1 - width]) * filtermatrix[0][0])
@@ -187,9 +194,9 @@ public class ImgProcessing {
                         + (Color.blue(originalpixels[index + 1 + width])) * filtermatrix[2][2]);
 
                 pixels[index] = Color.rgb(r, g, b);
-
                 index++;
             }
+            //Going to the next "line" of the image
             index += 2;
         }
     }
@@ -206,9 +213,11 @@ public class ImgProcessing {
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
+
     /**
      * This method isolate a color of an image.
      * The user can choose the color he wants from the value picker.
+     * @param colorValue color to isolate.
      */
     public static void isolate(int colorValue) {
 
@@ -232,6 +241,9 @@ public class ImgProcessing {
         }
     }
 
+    /**
+     * Gives the sepia effect to the image.
+     */
     public static void sepia(){
 
         int pixels[] = image.getArraypixel();
@@ -263,10 +275,10 @@ public class ImgProcessing {
     }
 
     /**
-     * Fusion between two pictures, one is a white picture with black text. The text image need to be smaller or equal to the other one.
+     *  Fusion between two pictures, one is a white picture with black text. The text image need to be smaller or equal to the other one.
      * When a black pixel is detected in the array of the text picture, an average value of the two pixel is done.
+     * @param bitmapText Ht eimage to be merged with.
      */
-
     public static void fusion (Bitmap bitmapText) {
 
         int widthtext = bitmapText.getWidth();
@@ -339,11 +351,10 @@ public class ImgProcessing {
         return binaryString.substring(0,3);
     }
 
-    public static void setImage(Img imagebase){
-        image = imagebase;
-    }
-
-
+    /**
+     * Setting the image to process.
+     * @param imagebase image to process.
+     */
     public static void setImage(Img imagebase){
         image = imagebase;
     }

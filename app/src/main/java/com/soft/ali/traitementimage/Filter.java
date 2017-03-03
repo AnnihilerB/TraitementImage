@@ -43,43 +43,45 @@ public class Filter {
      * @param sigma is the standard deviation of the gaussian distribution.
      */
     public void setGauss(double sigma){
-        int [][] indice = new int [sizefilter*sizefilter][2];
-        int numIndice=0;
+        int [][] matrixIndex = new int [sizefilter*sizefilter][2];
+        int index=0;
         int totalValue=0;
         if(sizefilter==3){
-            indice [0][0] = -1;
-            indice [0][1] = -1;
-            indice [1][0] = 0;
-            indice [1][1] = -1;
-            indice [2][0] = 1;
-            indice [2][1] = -1;
-            indice [3][0] = -1;
-            indice [3][1] = 0;
-            indice [4][0] = 0;
-            indice [4][1] = 0;
-            indice [5][0] = 1;
-            indice [5][1] = 0;
-            indice [6][0] = -1;
-            indice [6][1] = 1;
-            indice [7][0] = 0;
-            indice [7][1] = 1;
-            indice [8][0] = 1;
-            indice [8][1] = 1;
+            matrixIndex [0][0] = -1;
+            matrixIndex [0][1] = -1;
+            matrixIndex [1][0] = 0;
+            matrixIndex [1][1] = -1;
+            matrixIndex [2][0] = 1;
+            matrixIndex [2][1] = -1;
+            matrixIndex [3][0] = -1;
+            matrixIndex [3][1] = 0;
+            matrixIndex [4][0] = 0;
+            matrixIndex [4][1] = 0;
+            matrixIndex [5][0] = 1;
+            matrixIndex [5][1] = 0;
+            matrixIndex [6][0] = -1;
+            matrixIndex [6][1] = 1;
+            matrixIndex [7][0] = 0;
+            matrixIndex [7][1] = 1;
+            matrixIndex [8][0] = 1;
+            matrixIndex [8][1] = 1;
 
+            //Ratio is used to set the matric corner value to one.
             float ratio = 0;
             float fraction = 1/(float)(2*Math.PI*sigma*sigma);
 
             for(int i=0; i<sizefilter;i++){
                 for(int j=0; j<sizefilter; j++){
 
-                    float exp = (float)Math.exp(-( (indice[numIndice][0]*indice[numIndice][0] +indice[numIndice][1]*indice[numIndice][1])  / ((2*sigma*sigma))     ));
-                    float calcul = fraction *exp;
+                    float exp = (float)Math.exp(-( (matrixIndex[index][0]*matrixIndex[index][0] +matrixIndex[index][1]*matrixIndex[index][1])  / ((2*sigma*sigma))     ));
+                    float calculus = fraction *exp;
 
+                    //Determining the ratio.
                     if (i == 0 && j == 0){
-                        ratio = 1/calcul;
+                        ratio = 1/calculus;
                     }
-                    filter[i][j] = calcul;
-                    numIndice++;
+                    index++;
+                    filter[i][j] = calculus;
                     filter[i][j] = Math.round(filter[i][j]* ratio);
                     totalValue=totalValue + Math.round(filter [i][j]);
                 }

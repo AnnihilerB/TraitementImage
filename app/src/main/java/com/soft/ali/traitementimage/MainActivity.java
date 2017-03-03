@@ -7,11 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -28,18 +24,18 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.io.File;
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private Img image;
     private Img imageHide;
-    private  ImgView imgView;
+    private ImgView imgView;
     private Uri photoURI;
     private File photoCaptured;
     private Context mainContext;
-    private int hueValue=0;
-    private int colorValue=0;
-    private int sizeFilterValue=3;
-    private int typeFilterValue=1;
+    private int hueValue = 0;
+    private int colorValue = 0;
+    private int sizeFilterValue = 3;
+    private int typeFilterValue = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,28 +50,28 @@ public class MainActivity extends AppCompatActivity{
         image = new Img(bitmap);
         imageHide = new Img();
         ImgProcessing.setImage(image);
-        imgView = (ImgView)findViewById(R.id.iv);
+        imgView = (ImgView) findViewById(R.id.iv);
         imgView.setOnTouchListener(new ScrollZoomListener());
 
         //Button initialization.
-        Button buttonGray = (Button)findViewById(R.id.buttonGray);
-        Button buttonColorize= (Button)findViewById(R.id.buttonColorize);
-        Button buttonEqualization = (Button)findViewById(R.id.buttonEqualization);
-        Button buttonExtension = (Button)findViewById(R.id.buttonExtension);
-        Button buttonConvolution = (Button)findViewById(R.id.buttonConvolution);
-        Button buttonOverexposure = (Button)findViewById(R.id.buttonOverexposure);
-        Button buttonFusion = (Button)findViewById(R.id.buttonFusion);
-        Button buttonRes = (Button)findViewById(R.id.buttonReset);
-        Button buttonValue = (Button)findViewById(R.id.buttonValue);
-        Button buttonIsolate = (Button)findViewById(R.id.buttonIsolate);
-        Button buttonSepia = (Button)findViewById(R.id.buttonSepia);
+        Button buttonGray = (Button) findViewById(R.id.buttonGray);
+        Button buttonColorize = (Button) findViewById(R.id.buttonColorize);
+        Button buttonEqualization = (Button) findViewById(R.id.buttonEqualization);
+        Button buttonExtension = (Button) findViewById(R.id.buttonExtension);
+        Button buttonConvolution = (Button) findViewById(R.id.buttonConvolution);
+        Button buttonOverexposure = (Button) findViewById(R.id.buttonOverexposure);
+        Button buttonFusion = (Button) findViewById(R.id.buttonFusion);
+        Button buttonRes = (Button) findViewById(R.id.buttonReset);
+        Button buttonValue = (Button) findViewById(R.id.buttonValue);
+        Button buttonIsolate = (Button) findViewById(R.id.buttonIsolate);
+        Button buttonSepia = (Button) findViewById(R.id.buttonSepia);
         Button buttonHide = (Button) findViewById(R.id.buttonImgHide);
 
-        FloatingActionsMenu menuActions = (FloatingActionsMenu)findViewById(R.id.actionsMenu);
-        FloatingActionButton fabCamera = (FloatingActionButton)findViewById(R.id.fabCamera);
-        FloatingActionButton fabGallerie = (FloatingActionButton)findViewById(R.id.fabGallerie);
+        FloatingActionsMenu menuActions = (FloatingActionsMenu) findViewById(R.id.actionsMenu);
+        FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fabCamera);
+        FloatingActionButton fabGallerie = (FloatingActionButton) findViewById(R.id.fabGallerie);
 
-        final FrameLayout blackBackground = (FrameLayout)findViewById(R.id.background);
+        final FrameLayout blackBackground = (FrameLayout) findViewById(R.id.background);
 
         menuActions.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
@@ -110,8 +106,6 @@ public class MainActivity extends AppCompatActivity{
         });
 
 
-
-
         buttonGray.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,7 +133,7 @@ public class MainActivity extends AppCompatActivity{
         buttonExtension.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.extensionDynamique();
+                ImgProcessing.extendDynamism();
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -205,14 +199,12 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 startGallery(Constants.GALLERY_SECOND_IMAGE);
-                if (checkPicturesSize(image,imageHide)){
+                if (checkPicturesSize(image, imageHide)) {
                     ImgProcessing.hideImageToAnother(imageHide);
                     Utils.updateImageView(image, imgView);
                 }
             }
         });
-    }
-
     }
 
 
@@ -221,7 +213,7 @@ public class MainActivity extends AppCompatActivity{
      * It allows us to extract the data we need and use them later.
      * @param requestCode is used to know which activity has returned.
      * @param resultCode  allows us to know if the actiity has ended well or not.
-     * @param data  the activity returns.
+     * @param data        the activity returns.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -241,8 +233,7 @@ public class MainActivity extends AppCompatActivity{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else if (requestCode == Constants.REQUEST_CAPTURE  && resultCode == RESULT_CANCELED) {
+        } else if (requestCode == Constants.REQUEST_CAPTURE && resultCode == RESULT_CANCELED) {
             Toast.makeText(mainContext, "Capture canceled", Toast.LENGTH_SHORT).show();
         }
 
@@ -250,14 +241,13 @@ public class MainActivity extends AppCompatActivity{
 
         if (requestCode == Constants.WRITE_IMAGE && resultCode == RESULT_OK && data != null) {
             Uri FileToWrite = data.getData();
-            Utils.writeImageToStorage( ((BitmapDrawable) imgView.getDrawable()).getBitmap(), FileToWrite, getContentResolver(), mainContext);
-        }
-        else if (requestCode == Constants.WRITE_IMAGE && resultCode == RESULT_CANCELED )
+            Utils.writeImageToStorage(((BitmapDrawable) imgView.getDrawable()).getBitmap(), FileToWrite, getContentResolver(), mainContext);
+        } else if (requestCode == Constants.WRITE_IMAGE && resultCode == RESULT_CANCELED)
             Toast.makeText(mainContext, "Save canceled.", Toast.LENGTH_SHORT).show();
 
         //================== LOADING FROM GALLERY ==================//
 
-        if (requestCode == Constants.LOAD_IMAGE && resultCode == RESULT_OK  && data != null){
+        if (requestCode == Constants.LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
             Uri uri = data.getData();
             try {
                 image.clearMemory();
@@ -269,12 +259,11 @@ public class MainActivity extends AppCompatActivity{
                 Toast.makeText(mainContext, "Error getting bitmap from storage.", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
-        }
-        else if (requestCode == Constants.LOAD_IMAGE && resultCode == RESULT_CANCELED)
+        } else if (requestCode == Constants.LOAD_IMAGE && resultCode == RESULT_CANCELED)
             Toast.makeText(mainContext, "Loading canceled.", Toast.LENGTH_SHORT).show();
 
         // LOADING SECOND IMAGE FOR HIDE PIC TO ANOTHER ONE
-        if (requestCode == 1 && resultCode == RESULT_OK  && data != null){
+        if (requestCode == Constants.GALLERY_SECOND_IMAGE && resultCode == RESULT_OK && data != null) {
             Uri uri = data.getData();
             try {
                 imageHide.clearMemory();
@@ -284,21 +273,20 @@ public class MainActivity extends AppCompatActivity{
                 Toast.makeText(mainContext, "Error getting bitmap from storage.", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
-        }
-        else if (requestCode == 1 && resultCode == RESULT_CANCELED)
-            Toast.makeText(mainContext, "Loading canceled.", Toast.LENGTH_SHORT).show()
+        } else if (requestCode == Constants.GALLERY_SECOND_IMAGE && resultCode == RESULT_CANCELED)
+            Toast.makeText(mainContext, "Loading canceled.", Toast.LENGTH_SHORT).show();
 
 
         //================== VALUE PICKER ===================//
 
-        if (requestCode == Constants.PICKER_VALUE && resultCode == RESULT_OK && resultCode == RESULT_OK && data != null){
-            hueValue = data.getIntExtra("hueValue",120);
+        if (requestCode == Constants.PICKER_VALUE && resultCode == RESULT_OK && resultCode == RESULT_OK && data != null) {
+            hueValue = data.getIntExtra("hueValue", 120);
             colorValue = data.getIntExtra("colorValue", 120);
-            sizeFilterValue = data.getIntExtra("sizeFilterValue",3);
-            typeFilterValue = data.getIntExtra("typeFilterValue",Constants.GAUSS);
+            sizeFilterValue = data.getIntExtra("sizeFilterValue", 3);
+            typeFilterValue = data.getIntExtra("typeFilterValue", Constants.GAUSS);
         }
-
     }
+
     /**
      * This method launches the camera and allows the user to capture a picture.
      * An Intent is launched to start the camera.
@@ -315,17 +303,21 @@ public class MainActivity extends AppCompatActivity{
         startActivityForResult(cam, Constants.REQUEST_CAPTURE);
     }
 
-    public void startGallery (){
+    /**
+     * Starting a gallery to pick an image.
+     * Can be used to setup an image or to hide an image
+     * @param choice setting up or hiding an image.
+     */
+    public void startGallery(int choice) {
         // Create the Intent for Image Gallery.
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
-        //startActivityForResult(i, Constants.LOAD_IMAGE);
-        switch (choice){
-            case Constants.GALLERY_NORMAL :
+        switch (choice) {
+            case Constants.GALLERY_NORMAL:
                 startActivityForResult(i, Constants.LOAD_IMAGE);
                 break;
-            case Constants.GALLERY_SECOND_IMAGE :
-                startActivityForResult(i, 1);
+            case Constants.GALLERY_SECOND_IMAGE:
+                startActivityForResult(i, Constants.GALLERY_SECOND_IMAGE);
         }
     }
 
@@ -334,7 +326,7 @@ public class MainActivity extends AppCompatActivity{
      * The method is used only if the API is >= 23.
      * If permission has not been granted yet, the app asks the user to use the feature.
      */
-    private void checkPermissions(){
+    private void checkPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Constants.LOAD_PERMISSIONS);
@@ -348,19 +340,17 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-
     /**
-     *
      * @param image
      * @param imageToHide
      * @return
      */
-    private boolean checkPicturesSize(Img image, Img imageToHide){
-        return ((image.getHeight()== imageToHide.getHeight()) & (image.getWidth() == imageToHide.getWidth()));
+    private boolean checkPicturesSize(Img image, Img imageToHide) {
+        return ((image.getHeight() == imageToHide.getHeight()) & (image.getWidth() == imageToHide.getWidth()));
 
     }
-
 }
+
 
 
 

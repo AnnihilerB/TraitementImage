@@ -40,6 +40,7 @@ public class ValuePicker extends AppCompatActivity{
         final TextView hueValueText = (TextView) findViewById(R.id.textHueValue);
 
         final SeekBar seekBarColor = (SeekBar) findViewById(R.id.seekBarColor);
+        //Displaying a gradient so the user can see which color he is picking.
         LinearGradient linearGradient = new LinearGradient(0.f, 0.f, 720.f, 0.0f, new int[]{0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF, 0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF}, null, Shader.TileMode.CLAMP); //Draw a color bar from black to white.
         ShapeDrawable shape = new ShapeDrawable(new RectShape());
         shape.getPaint().setShader(linearGradient);
@@ -142,6 +143,7 @@ public class ValuePicker extends AppCompatActivity{
             }
         });
 
+        //Sending values selected by the user.
         buttonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

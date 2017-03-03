@@ -9,6 +9,12 @@ import android.util.Log;
 
 public class LUT {
 
+    /**
+     * Class handling a Look Up table.
+     * This table allows us to store results of a calculus.
+     * The calculus is made 255 times maximum.
+     */
+
     private  float[] table;
     private float min;
     private float max;
@@ -20,22 +26,31 @@ public class LUT {
         return table[index];
     }
 
+    /**
+     * Generate a LUT based on a HSV image.
+     * The table is filled with value between 0 and 1.
+     * @param image the image to be processed.
+     */
     public void generateHSV(Img image){
         int[] pixels = image.getArraypixel();
 
-        dynamiqueHSV(pixels);
+        dynamicHSV(pixels);
 
         for (int i = 0; i < table.length; i++){
             table[i]= getExtensionValue(i);
         }
-        Log.i("LUT", "generateHSV: ");
     }
 
     private float getExtensionValue(int value){
         return ((value - min) ) / (max - min);
     }
 
-    private void dynamiqueHSV(int[] pixels){
+    /**
+     * Method calculating th dynamic for an HSV image.
+     * min and max are the average of the min and max of each RGB component.
+     * @param pixels pixel array to be processed.
+     */
+    private void dynamicHSV(int[] pixels){
 
         float minR= 255;
         float minG= 255;
@@ -56,11 +71,4 @@ public class LUT {
         min =((minR+minG+minB) / 3)/(float)255;
         max = ((maxR+maxG+maxB) / 3)/(float)255;
     }
-
-
-
-
-
-
-
 }
