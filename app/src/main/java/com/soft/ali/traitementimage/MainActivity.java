@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity{
             Toast.makeText(mainContext, "Loading canceled.", Toast.LENGTH_SHORT).show();
 		
 		// LOADING SECOND IMAGE FOR HIDE PIC TO ANOTHER ONE
-		if (requestCode == Constants.LOAD_IMAGE_SECOND && resultCode == RESULT_OK  && data != null){
+		if (requestCode == 1 && resultCode == RESULT_OK  && data != null){
             Uri uri = data.getData();
             try {
                 imageHide.clearMemory();
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity{
                 e.printStackTrace();
             }
         }
-        else if (requestCode == Constants.LOAD_IMAGE_SECOND && resultCode == RESULT_CANCELED)
+        else if (requestCode == 1 && resultCode == RESULT_CANCELED)
             Toast.makeText(mainContext, "Loading canceled.", Toast.LENGTH_SHORT).show();
 			
 
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity{
                 startActivityForResult(i, Constants.LOAD_IMAGE);
                 break;
             case Constants.GALLERY_SECOND_IMAGE :
-                startActivityForResult(i, Constants.LOAD_IMAGE_SECOND);
+                startActivityForResult(i, 1);
         }
     }
 

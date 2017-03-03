@@ -14,7 +14,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 /**
- * Created by Valford on 01/03/2017.
+ * ValuePicker is an activity used to help the user for choose different values to applied for the image processing.
+ * The hue value for "colorize", a color value for "isolate", and the size and the type of a filter for the convolution.
+ * Each value is choose by a seek bar progress, when the user has finished to choose the value. P
+ * Press the "ok" button permit to create an intent that is going to store each values and send the to the main activity, then the value activity stop.
  */
 
 public class ValuePicker extends AppCompatActivity{
@@ -33,11 +36,11 @@ public class ValuePicker extends AppCompatActivity{
 
         final SeekBar seekBarHue = (SeekBar) findViewById(R.id.seekBarHue);
         seekBarHue.setMax(360);
-        //0xFFFF0000,0xFFFFFF00, 0xFF00FF00, 0xFF00FFFF, 0xFF0000FF, 0xFFFF00FF,0xFFFF0000 //value for background
+        //0xFFFF0000,0xFFFFFF00, 0xFF00FF00, 0xFF00FFFF, 0xFF0000FF, 0xFFFF00FF,0xFFFF0000 //values for background
         final TextView hueValueText = (TextView) findViewById(R.id.textHueValue);
 
         final SeekBar seekBarColor = (SeekBar) findViewById(R.id.seekBarColor);
-        LinearGradient linearGradient = new LinearGradient(0.f, 0.f, 720.f, 0.0f, new int[]{0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF, 0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF}, null, Shader.TileMode.CLAMP);
+        LinearGradient linearGradient = new LinearGradient(0.f, 0.f, 720.f, 0.0f, new int[]{0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF, 0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF}, null, Shader.TileMode.CLAMP); //Draw a color bar from black to white.
         ShapeDrawable shape = new ShapeDrawable(new RectShape());
         shape.getPaint().setShader(linearGradient);
         seekBarColor.setProgressDrawable(shape);
@@ -66,7 +69,7 @@ public class ValuePicker extends AppCompatActivity{
 
         seekBarColor.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { //In function of the progress value, a rgb pixel value is calculated and store in the colorValue parameter.
                 if(fromUser){
                     int r = 0;
                     int g = 0;

@@ -3,10 +3,13 @@ package com.soft.ali.traitementimage;
 import android.util.Log;
 
 /**
- * Created by Valentin on 17/02/2017.
+    This class create a two dimension array of floats which stores the values of the different filters (Average, Gauss, Sobel and Laplace) by calling the "set" methods.
+    For create the classe the user need to give a size filter.
+    The filter array is a matrix 3*3 or more.
  */
 
 public class Filter {
+
     private float filter [] [];
     private int sizefilter;
 
@@ -23,6 +26,9 @@ public class Filter {
         return sizefilter;
     }
 
+    /**
+     A low pass filter for reducing noises in a picture, every value in the filter as the same number.
+     */
     public void setAverage(){
         for(int i=0; i<sizefilter; i++){
             for(int j=0; j<sizefilter; j++){
@@ -31,6 +37,11 @@ public class Filter {
         }
     }
 
+    /**
+        First an indice array is initialise, each value match with the position of in x and y of the filter, after that, a calculation give a number for every boxes of the filter.
+        These values are multiplied by a ratio, this ratio is the value need to get 1 in the boxes on the edge of the filter.
+     * @param sigma is the standard deviation of the gaussian distribution.
+     */
     public void setGauss(double sigma){
         int [][] indice = new int [sizefilter*sizefilter][2];
         int numIndice=0;
