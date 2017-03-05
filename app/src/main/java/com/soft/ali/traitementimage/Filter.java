@@ -45,7 +45,7 @@ public class Filter {
     public void setGauss(double sigma){
         int [][] matrixIndex = new int [sizefilter*sizefilter][2];
         int index=0;
-        int totalValue=0;
+        float totalValue=0;
         if(sizefilter==3){
             matrixIndex [0][0] = -1;
             matrixIndex [0][1] = -1;
@@ -76,19 +76,14 @@ public class Filter {
                     float exp = (float)Math.exp(-( (matrixIndex[index][0]*matrixIndex[index][0] +matrixIndex[index][1]*matrixIndex[index][1])  / ((2*sigma*sigma))     ));
                     float calculus = fraction *exp;
 
-                    //Determining the ratio.
-                    if (i == 0 && j == 0){
-                        ratio = 1/calculus;
-                    }
                     index++;
                     filter[i][j] = calculus;
-                    filter[i][j] = Math.round(filter[i][j]* ratio);
-                    totalValue=totalValue + Math.round(filter [i][j]);
+                    totalValue=totalValue + filter [i][j];
                 }
             }
             for(int i=0; i<sizefilter; i++){
                 for(int j=0; j<sizefilter; j++){
-                    filter[i][j] *=1/(float)(totalValue);
+                    filter[i][j] *=1/totalValue;
                 }
             }
         }
