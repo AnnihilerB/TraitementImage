@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mainContext = getApplicationContext();
 
         //Creating a blank image.
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.poivron);
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena);
         image = new Img(bitmap);
         imageHide = new Img();
         ImgProcessing.setImage(image);
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         Button buttonIsolate = (Button) findViewById(R.id.buttonIsolate);
         Button buttonSepia = (Button) findViewById(R.id.buttonSepia);
         Button buttonHide = (Button) findViewById(R.id.buttonImgHide);
+        Button buttonSave = (Button)findViewById(R.id.buttonSave);
 
         FloatingActionsMenu menuActions = (FloatingActionsMenu) findViewById(R.id.actionsMenu);
         FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fabCamera);
@@ -205,6 +206,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent write = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                write.addCategory(Intent.CATEGORY_OPENABLE);
+                write.setType("image/*");
+                startActivityForResult(write, Constants.WRITE_IMAGE);
+            }
+        });
     }
 
 
@@ -248,10 +259,10 @@ public class MainActivity extends AppCompatActivity {
         //================== LOADING FROM GALLERY ==================//
 
         if (requestCode == Constants.LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
-            Uri uri = data.getData();
+            photoURI = data.getData();
             try {
                 image.clearMemory();
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoURI);
                 image = new Img(bitmap);
                 ImgProcessing.setImage(image);
                 imgView.setImageBitmap(bitmap);

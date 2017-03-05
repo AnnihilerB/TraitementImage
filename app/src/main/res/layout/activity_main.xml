@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="matrix"
-        android:src="@drawable/poivron"/>
+        android:src="@drawable/lena"/>
 
 
 
@@ -112,6 +112,15 @@
     android:layout_centerHorizontal="true"
     android:layout_marginBottom="16dp"
     android:text="RESET"/>
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="save"
+        android:layout_above="@+id/buttonReset"
+        android:layout_alignLeft="@+id/buttonReset"
+        android:layout_alignStart="@+id/buttonReset" />
 
     <Button
         android:id="@+id/buttonValue"

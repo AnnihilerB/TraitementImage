@@ -128,7 +128,7 @@ public class ImgProcessing {
                 r = (int) (Math.sqrt(Math.pow(Color.red(pixelHorizontal[i]),2) + Math.pow(Color.red(pixelVertical[i]), 2)));
                 g = (int) (Math.sqrt(Math.pow(Color.green (pixelHorizontal[i]),2) + Math.pow(Color.green(pixelVertical[i]), 2)));
                 b = (int) (Math.sqrt(Math.pow(Color.blue(pixelHorizontal[i]),2) + Math.pow(Color.blue(pixelVertical[i]), 2)));
-                pixels[i] = Color.rgb(r,g,b);
+                pixels[i] = Color.rgb(r, g ,b);
             }
 
         }
@@ -347,7 +347,6 @@ public class ImgProcessing {
      */
     public static String getFirstsBinaryValue(int rgbArg){
         String binaryString =Integer.toBinaryString(rgbArg);
-        System.out.println(binaryString);
         return binaryString.substring(0,3);
     }
 
