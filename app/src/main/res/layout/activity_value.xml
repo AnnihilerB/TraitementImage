@@ -30,24 +30,24 @@
         android:layout_alignStart="@+id/seekBarHue" />
 
     <SeekBar
+        android:id="@+id/seekBarSizeFilter"
         android:layout_width="300dip"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBarSizeFilter"
-        android:max="9"
-        android:progress="3"
-        android:layout_below="@+id/textSizeFilter"
         android:layout_alignLeft="@+id/seekBarColor"
-        android:layout_alignStart="@+id/seekBarColor" />
+        android:layout_alignStart="@+id/seekBarColor"
+        android:layout_below="@+id/textSizeFilter"
+        android:max="7"
+        android:progress="3" />
 
     <SeekBar
+        android:id="@+id/seekBarTypeFilter"
         android:layout_width="300dip"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBarTypeFilter"
-        android:max="5"
-        android:progress="1"
-        android:layout_below="@+id/textTypeFilter"
         android:layout_alignLeft="@+id/seekBarSizeFilter"
-        android:layout_alignStart="@+id/seekBarSizeFilter" />
+        android:layout_alignStart="@+id/seekBarSizeFilter"
+        android:layout_below="@+id/textTypeFilter"
+        android:max="4"
+        android:progress="0" />
 
     <Button
         android:text="OK"
