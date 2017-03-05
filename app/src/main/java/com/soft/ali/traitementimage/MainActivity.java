@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mainContext = getApplicationContext();
 
         //Creating a blank image.
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena);
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena_color);
         image = new Img(bitmap);
         imageHide = new Img();
         ImgProcessing.setImage(image);
@@ -61,32 +62,16 @@ public class MainActivity extends AppCompatActivity {
         Button buttonConvolution = (Button) findViewById(R.id.buttonConvolution);
         Button buttonOverexposure = (Button) findViewById(R.id.buttonOverexposure);
         Button buttonFusion = (Button) findViewById(R.id.buttonFusion);
-        Button buttonRes = (Button) findViewById(R.id.buttonReset);
-        Button buttonValue = (Button) findViewById(R.id.buttonValue);
         Button buttonIsolate = (Button) findViewById(R.id.buttonIsolate);
         Button buttonSepia = (Button) findViewById(R.id.buttonSepia);
         Button buttonHide = (Button) findViewById(R.id.buttonImgHide);
-        Button buttonSave = (Button)findViewById(R.id.buttonSave);
+        ImageButton buttonRes = (ImageButton) findViewById(R.id.buttonReset);
+        ImageButton buttonValue = (ImageButton) findViewById(R.id.buttonValue);
+        ImageButton buttonSave = (ImageButton)findViewById(R.id.buttonSave);
+        ImageButton buttonLoadCamera = (ImageButton)findViewById(R.id.buttonLoadCamera);
+        ImageButton buttonLoadGallery = (ImageButton)findViewById(R.id.buttonLoadGallery);
 
-        FloatingActionsMenu menuActions = (FloatingActionsMenu) findViewById(R.id.actionsMenu);
-        FloatingActionButton fabCamera = (FloatingActionButton) findViewById(R.id.fabCamera);
-        FloatingActionButton fabGallerie = (FloatingActionButton) findViewById(R.id.fabGallerie);
-
-        final FrameLayout blackBackground = (FrameLayout) findViewById(R.id.background);
-
-        menuActions.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                blackBackground.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                blackBackground.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        fabCamera.setOnClickListener(new View.OnClickListener() {
+        buttonLoadCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkPermissions();
@@ -97,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        fabGallerie.setOnClickListener(new View.OnClickListener() {
+        buttonLoadGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkPermissions();
