@@ -14,7 +14,7 @@ public class Histogram {
 
     private int[] hist;
     private int[] cumulHist;
-    private int nbpixels = 0;
+    private int nbPixels = 0;
 
     public Histogram() {
         hist = new int[Constants.NBCOLORS];
@@ -28,7 +28,7 @@ public class Histogram {
      */
     public void generateHSVHistogram(int []pix, int channel) {
 
-        nbpixels = pix.length;
+        nbPixels = pix.length;
 
         float[] hsv = new float[3];
 
@@ -65,7 +65,7 @@ public class Histogram {
     }
 
     public int getNbPixels(){
-        return nbpixels;
+        return nbPixels;
     }
 
 

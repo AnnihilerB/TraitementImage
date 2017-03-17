@@ -72,7 +72,7 @@ public class Utils {
     }
     public static void updateImageView(Img image, ImgView imgView){
         Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(image.getArraypixel(), 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
+        bitmap.setPixels(image.getArrayPixel(), 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
         imgView.setImageBitmap(bitmap);
 
     }

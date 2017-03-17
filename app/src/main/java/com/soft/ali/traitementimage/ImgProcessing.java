@@ -18,13 +18,13 @@ public class ImgProcessing {
      * accordingly to the hue he choosed.
      * The image is converted to HSV first then the hue is changed.
      */
-    public static void colorize(int chosencolor) {
+    public static void colorize(int chosenColor) {
         float hsv[] = new float[3];
-        int pixels[] = image.getArraypixel();
+        int pixels[] = image.getArrayPixel();
         for (int i = 0; i < pixels.length; ++i) {
 
             Color.colorToHSV(pixels[i], hsv);
-            hsv[Constants.HSV_HUE] = (float) chosencolor;
+            hsv[Constants.HSV_HUE] = (float) chosenColor;
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
@@ -41,7 +41,7 @@ public class ImgProcessing {
      */
     public static void histogramEqualization(){
         Histogram hist = new Histogram();
-        int pixels[] = image.getArraypixel();
+        int pixels[] = image.getArrayPixel();
 
         int channel = Constants.HSV_VIBRANCE;
         hist.generateHSVHistogram(pixels, channel);
@@ -66,7 +66,7 @@ public class ImgProcessing {
      */
     public static void extendDynamism() {
         int channel = Constants.HSV_VIBRANCE;
-        int pixels[] = image.getArraypixel();
+        int pixels[] = image.getArrayPixel();
         float[] hsv = new float[3];
         LUT lut = new LUT();
         lut.generateHSV(image);
@@ -84,7 +84,7 @@ public class ImgProcessing {
     public static void toGray(){
         int red, green, blue;
         int rgb, total;
-        int pixels[] = image.getArraypixel();
+        int pixels[] = image.getArrayPixel();
 
         for (int i = 0; i < pixels.length; i++) {
             rgb = pixels[i];
@@ -105,24 +105,24 @@ public class ImgProcessing {
 
         if(typeFilter == Constants.AVERAGE){
             filter.setAverage();
-            calculConvolution(filter.getFilter(), filter.getsizefilter());
+            calculConvolution(filter.getFilter(), filter.getSizeFilter());
         }
 
         if(typeFilter == Constants.GAUSS){
             double sigma = 0.8;
             filter.setGauss(sigma);
-            calculConvolution(filter.getFilter(), filter.getsizefilter());
+            calculConvolution(filter.getFilter(), filter.getSizeFilter());
         }
 
         if(typeFilter == Constants.SOBEL){
             filter.setSobelHorizontal();
-            calculConvolution(filter.getFilter(), filter.getsizefilter());
-            int[] pixelHorizontal= image.getArraypixel().clone();
+            calculConvolution(filter.getFilter(), filter.getSizeFilter());
+            int[] pixelHorizontal= image.getArrayPixel().clone();
             filter.setSobelVertical();
-            calculConvolution(filter.getFilter(), filter.getsizefilter());
-            int[] pixelVertical = image.getArraypixel().clone();
+            calculConvolution(filter.getFilter(), filter.getSizeFilter());
+            int[] pixelVertical = image.getArrayPixel().clone();
 
-            int[]pixels = image.getArraypixel();
+            int[]pixels = image.getArrayPixel();
             int r,g,b;
             for (int i =0; i < pixelHorizontal.length; i++){
                 r = (int) (Math.sqrt(Math.pow(Color.red(pixelHorizontal[i]),2) + Math.pow(Color.red(pixelVertical[i]), 2)));
@@ -135,24 +135,24 @@ public class ImgProcessing {
 
         if(typeFilter == Constants.LAPLACE){
             filter.setLaplace();
-            calculConvolution(filter.getFilter(), filter.getsizefilter());
+            calculConvolution(filter.getFilter(), filter.getSizeFilter());
         }
 
         if(typeFilter == Constants.LAPLACE2){
             filter.setLaplace2();
-            calculConvolution(filter.getFilter(), filter.getsizefilter());
+            calculConvolution(filter.getFilter(), filter.getSizeFilter());
         }
     }
 
     /**
      * This method applied the filter on the chosen image, for the moment only the 3*3 matrix are functionnal.
      * The edge of the picture are not processed.
-     * @param filtermatrix the filter to apply.
+     * @param filterMatrix the filter to apply.
      * @param sizefilter the size of the filer (odd number).
      */
-    private static void calculConvolution(float [][] filtermatrix, int sizefilter) {
-        int pixels[] = image.getArraypixel();
-        int originalpixels[] = pixels.clone();
+    private static void calculConvolution(float [][] filterMatrix, int sizefilter) {
+        int pixels[] = image.getArrayPixel();
+        int originalPixels[] = pixels.clone();
 
         int width = image.getWidth();
         int height = image.getHeight();
@@ -165,33 +165,33 @@ public class ImgProcessing {
         //The filter is applied on each RGB channel separately.
         for (int i = 1; i < height - 1; i++) {
             for (int j = 1; j < width - 1; j++) {
-                r = (int) ((Color.red(originalpixels[index - 1 - width]) * filtermatrix[0][0])
-                        + (Color.red(originalpixels[index - width]) * filtermatrix[0][1])
-                        + (Color.red(originalpixels[index + 1 - width]) * filtermatrix[0][2])
-                        + (Color.red(originalpixels[index - 1]) * filtermatrix[1][0])
-                        + (Color.red(originalpixels[index]) * filtermatrix[1][1])
-                        + (Color.red(originalpixels[index + 1]) * filtermatrix[1][2])
-                        + (Color.red(originalpixels[index - 1 + width]) * filtermatrix[2][0])
-                        + (Color.red(originalpixels[index + width]) * filtermatrix[2][1])
-                        + (Color.red(originalpixels[index + 1 + width])) * filtermatrix[2][2]);
-                g = (int) ((Color.green(originalpixels[index - 1 - width]) * filtermatrix[0][0])
-                        + (Color.green(originalpixels[index - width]) * filtermatrix[0][1])
-                        + (Color.green(originalpixels[index + 1 - width]) * filtermatrix[0][2])
-                        + (Color.green(originalpixels[index - 1]) * filtermatrix[1][0])
-                        + (Color.green(originalpixels[index]) * filtermatrix[1][1])
-                        + (Color.green(originalpixels[index + 1]) * filtermatrix[1][2])
-                        + (Color.green(originalpixels[index - 1 + width]) * filtermatrix[2][0])
-                        + (Color.green(originalpixels[index + width]) * filtermatrix[2][1])
-                        + (Color.green(originalpixels[index + 1 + width])) * filtermatrix[2][2]);
-                b = (int) ((Color.blue(originalpixels[index - 1 - width]) * filtermatrix[0][0])
-                        + (Color.blue(originalpixels[index - width]) * filtermatrix[0][1])
-                        + (Color.blue(originalpixels[index + 1 - width]) * filtermatrix[0][2])
-                        + (Color.blue(originalpixels[index - 1]) * filtermatrix[1][0])
-                        + (Color.blue(originalpixels[index]) * filtermatrix[1][1])
-                        + (Color.blue(originalpixels[index + 1]) * filtermatrix[1][2])
-                        + (Color.blue(originalpixels[index - 1 + width]) * filtermatrix[2][0])
-                        + (Color.blue(originalpixels[index + width]) * filtermatrix[2][1])
-                        + (Color.blue(originalpixels[index + 1 + width])) * filtermatrix[2][2]);
+                r = (int) ((Color.red(originalPixels[index - 1 - width]) * filterMatrix[0][0])
+                        + (Color.red(originalPixels[index - width]) * filterMatrix[0][1])
+                        + (Color.red(originalPixels[index + 1 - width]) * filterMatrix[0][2])
+                        + (Color.red(originalPixels[index - 1]) * filterMatrix[1][0])
+                        + (Color.red(originalPixels[index]) * filterMatrix[1][1])
+                        + (Color.red(originalPixels[index + 1]) * filterMatrix[1][2])
+                        + (Color.red(originalPixels[index - 1 + width]) * filterMatrix[2][0])
+                        + (Color.red(originalPixels[index + width]) * filterMatrix[2][1])
+                        + (Color.red(originalPixels[index + 1 + width])) * filterMatrix[2][2]);
+                g = (int) ((Color.green(originalPixels[index - 1 - width]) * filterMatrix[0][0])
+                        + (Color.green(originalPixels[index - width]) * filterMatrix[0][1])
+                        + (Color.green(originalPixels[index + 1 - width]) * filterMatrix[0][2])
+                        + (Color.green(originalPixels[index - 1]) * filterMatrix[1][0])
+                        + (Color.green(originalPixels[index]) * filterMatrix[1][1])
+                        + (Color.green(originalPixels[index + 1]) * filterMatrix[1][2])
+                        + (Color.green(originalPixels[index - 1 + width]) * filterMatrix[2][0])
+                        + (Color.green(originalPixels[index + width]) * filterMatrix[2][1])
+                        + (Color.green(originalPixels[index + 1 + width])) * filterMatrix[2][2]);
+                b = (int) ((Color.blue(originalPixels[index - 1 - width]) * filterMatrix[0][0])
+                        + (Color.blue(originalPixels[index - width]) * filterMatrix[0][1])
+                        + (Color.blue(originalPixels[index + 1 - width]) * filterMatrix[0][2])
+                        + (Color.blue(originalPixels[index - 1]) * filterMatrix[1][0])
+                        + (Color.blue(originalPixels[index]) * filterMatrix[1][1])
+                        + (Color.blue(originalPixels[index + 1]) * filterMatrix[1][2])
+                        + (Color.blue(originalPixels[index - 1 + width]) * filterMatrix[2][0])
+                        + (Color.blue(originalPixels[index + width]) * filterMatrix[2][1])
+                        + (Color.blue(originalPixels[index + 1 + width])) * filterMatrix[2][2]);
 
                 pixels[index] = Color.rgb(r, g, b);
                 index++;
@@ -206,7 +206,7 @@ public class ImgProcessing {
     public static void overexposure () {
 
         float hsv[] = new float[3];
-        int pixels[] = image.getArraypixel();
+        int pixels[] = image.getArrayPixel();
         for(int i=0; i<pixels.length; i++){
             Color.colorToHSV(pixels[i], hsv);
             hsv[2] = (float) (hsv[2] + 0.20);
@@ -223,19 +223,19 @@ public class ImgProcessing {
 
         int limit = 150;
 
-        int canalgrey;
-        double valred = 0.3;
-        double valgreen = 0.59;
-        double valblue = 0.11;
+        int canalGrey;
+        double valRed = 0.3;
+        double valGreen = 0.59;
+        double valBlue = 0.11;
         int distance;
 
-        int pixels[] = image.getArraypixel();
+        int pixels[] = image.getArrayPixel();
 
         for (int i = 0; i < pixels.length; i++) {
             distance = (int) (Math.sqrt(Math.pow((Color.red(colorValue) - Color.red(pixels[i])), 2) + Math.pow((Color.green(colorValue) - Color.green(pixels[i])), 2) + Math.pow((Color.blue(colorValue) - Color.blue(pixels[i])), 2)));
             if (distance >= limit) {
-                canalgrey = (int) ((Color.red(pixels[i]) * valred) + (Color.green(pixels[i]) * valgreen) + (Color.blue(pixels[i]) * valblue));
-                pixels[i] = Color.rgb(canalgrey, canalgrey, canalgrey);
+                canalGrey = (int) ((Color.red(pixels[i]) * valRed) + (Color.green(pixels[i]) * valGreen) + (Color.blue(pixels[i]) * valBlue));
+                pixels[i] = Color.rgb(canalGrey, canalGrey, canalGrey);
             }
 
         }
@@ -246,31 +246,31 @@ public class ImgProcessing {
      */
     public static void sepia(){
 
-        int pixels[] = image.getArraypixel();
-        double valred;
-        double valgreen;
-        double valblue;
-        int canalred;
-        int canalgreen;
-        int canalblue;
+        int pixels[] = image.getArrayPixel();
+        double valRed;
+        double valGreen;
+        double valBlue;
+        int canalRed;
+        int canalGreen;
+        int canalBlue;
 
         for(int i=0; i<pixels.length; i++){
-            valred = 0.393;
-            valgreen = 0.769;
-            valblue = 0.189;
-            canalred = (int) Math.min(255, ((Color.red(pixels[i])*valred)+(Color.green(pixels[i])*valgreen)+(Color.blue(pixels[i])*valblue)));
+            valRed = 0.393;
+            valGreen = 0.769;
+            valBlue = 0.189;
+            canalRed = (int) Math.min(255, ((Color.red(pixels[i])*valRed)+(Color.green(pixels[i])*valGreen)+(Color.blue(pixels[i])*valBlue)));
 
-            valred = 0.349;
-            valgreen = 0.686;
-            valblue = 0.168;
-            canalgreen = (int) Math.min(255, ((Color.red(pixels[i])*valred)+(Color.green(pixels[i])*valgreen)+(Color.blue(pixels[i])*valblue)));
+            valRed = 0.349;
+            valGreen = 0.686;
+            valBlue = 0.168;
+            canalGreen = (int) Math.min(255, ((Color.red(pixels[i])*valRed)+(Color.green(pixels[i])*valGreen)+(Color.blue(pixels[i])*valBlue)));
 
-            valred = 0.272;
-            valgreen = 0.534;
-            valblue = 0.131;
-            canalblue = (int) Math.min(255, ((Color.red(pixels[i])*valred)+(Color.green(pixels[i])*valgreen)+(Color.blue(pixels[i])*valblue)));
+            valRed = 0.272;
+            valGreen = 0.534;
+            valBlue = 0.131;
+            canalBlue = (int) Math.min(255, ((Color.red(pixels[i])*valRed)+(Color.green(pixels[i])*valGreen)+(Color.blue(pixels[i])*valBlue)));
 
-            pixels[i] = Color.rgb(canalred, canalgreen, canalblue);
+            pixels[i] = Color.rgb(canalRed, canalGreen, canalBlue);
         }
     }
 
@@ -281,21 +281,21 @@ public class ImgProcessing {
      */
     public static void fusion (Bitmap bitmapText) {
 
-        int widthtext = bitmapText.getWidth();
-        int heighttext = bitmapText.getHeight();
-        int moyred, moygreen, moyblue;
-        int pixels[] = image.getArraypixel();
-        int pixelarraytext[] = new int[widthtext * heighttext];
+        int widthText = bitmapText.getWidth();
+        int heightText = bitmapText.getHeight();
+        int moyRed, moyGreen, moyBlue;
+        int pixels[] = image.getArrayPixel();
+        int pixelArrayText[] = new int[widthText * heightText];
 
-        bitmapText.getPixels(pixelarraytext,0,widthtext,0,0,widthtext,heighttext);
+        bitmapText.getPixels(pixelArrayText,0,widthText,0,0,widthText,heightText);
 
-        if (pixelarraytext.length <= pixels.length) {
-            for (int i = 0; i < pixelarraytext.length; i++) {
-                if (pixelarraytext[i] == Color.BLACK) {
-                    moyred = (Color.red(pixels[i]) + Color.red(pixelarraytext[i])) / 2;
-                    moygreen = (Color.green(pixels[i]) + Color.green(pixelarraytext[i])) / 2;
-                    moyblue = (Color.blue(pixels[i]) + Color.blue(pixelarraytext[i])) / 2;
-                    pixels[i] = Color.rgb(moyred, moygreen, moyblue);
+        if (pixelArrayText.length <= pixels.length) {
+            for (int i = 0; i < pixelArrayText.length; i++) {
+                if (pixelArrayText[i] == Color.BLACK) {
+                    moyRed = (Color.red(pixels[i]) + Color.red(pixelArrayText[i])) / 2;
+                    moyGreen = (Color.green(pixels[i]) + Color.green(pixelArrayText[i])) / 2;
+                    moyBlue = (Color.blue(pixels[i]) + Color.blue(pixelArrayText[i])) / 2;
+                    pixels[i] = Color.rgb(moyRed, moyGreen, moyBlue);
                 }
             }
         }
@@ -311,8 +311,8 @@ public class ImgProcessing {
         //variable to catch binary changes from both color rgb pictures
         String binaryResult;
         // array pixels of both pics : current pic and pic to hide
-        int[] pixels1 = image.getArraypixel();
-        int[] pixels2 = imgToHide.getArraypixel();
+        int[] pixels1 = image.getArrayPixel();
+        int[] pixels2 = imgToHide.getArrayPixel();
         for(int i=0; i< pixels1.length; i++) {
             //getting rgb colors from both pics
             red1 = Color.red(pixels1[i]);
@@ -352,10 +352,10 @@ public class ImgProcessing {
 
     /**
      * Setting the image to process.
-     * @param imagebase image to process.
+     * @param imageBase image to process.
      */
-    public static void setImage(Img imagebase){
-        image = imagebase;
+    public static void setImage(Img imageBase){
+        image = imageBase;
     }
 
 }

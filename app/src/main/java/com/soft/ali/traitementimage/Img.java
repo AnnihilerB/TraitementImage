@@ -13,7 +13,7 @@ import android.graphics.Bitmap;
 public class Img {
 
     private Bitmap originalImage;
-    private int arraypixel [];
+    private int arrayPixel[];
     private int width;
     private int height;
 
@@ -26,12 +26,12 @@ public class Img {
         originalImage = bitmap;
         width = originalImage.getWidth();
         height = originalImage.getHeight();
-        arraypixel = new int[width*height];
-        bitmap.getPixels(arraypixel, 0, width, 0,0, width, height);
+        arrayPixel = new int[width*height];
+        bitmap.getPixels(arrayPixel, 0, width, 0,0, width, height);
     }
 
-    public int [] getArraypixel() {
-        return arraypixel;
+    public int [] getArrayPixel() {
+        return arrayPixel;
     }
 
     public int getWidth() {
@@ -55,11 +55,11 @@ public class Img {
     public void clearMemory(){
         if (originalImage != null) {
             originalImage.recycle();
-            arraypixel = null;
+            arrayPixel = null;
         }
     }
 
     public void resetArrayPixels(){
-        this.originalImage.getPixels(arraypixel,0,width,0,0,width,height);
+        this.originalImage.getPixels(arrayPixel,0,width,0,0,width,height);
     }
 }

@@ -1,7 +1,6 @@
 package com.soft.ali.traitementimage;
 
 import android.graphics.Color;
-import android.util.Log;
 
 /**
  * Created by ali on 10/02/2017.
@@ -32,7 +31,7 @@ public class LUT {
      * @param image the image to be processed.
      */
     public void generateHSV(Img image){
-        int[] pixels = image.getArraypixel();
+        int[] pixels = image.getArrayPixel();
 
         dynamicHSV(pixels);
 

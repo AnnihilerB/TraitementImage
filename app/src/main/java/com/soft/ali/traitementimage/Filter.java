@@ -11,28 +11,28 @@ import android.widget.Toast;
 public class Filter {
 
     private float filter [] [];
-    private int sizefilter;
+    private int sizeFilter;
 
     public Filter (int nfilter){
-        sizefilter=nfilter;
-        filter = new float[sizefilter] [sizefilter];
+        sizeFilter=nfilter;
+        filter = new float[sizeFilter] [sizeFilter];
     }
 
     public float[][] getFilter(){
         return filter;
     }
 
-    public int getsizefilter(){
-        return sizefilter;
+    public int getSizeFilter(){
+        return sizeFilter;
     }
 
     /**
      A low pass filter for reducing noises in a picture, every value in the filter as the same number.
      */
     public void setAverage(){
-        for(int i=0; i<sizefilter; i++){
-            for(int j=0; j<sizefilter; j++){
-                filter[i][j]=1/(float)(sizefilter*sizefilter);
+        for(int i=0; i<sizeFilter; i++){
+            for(int j=0; j<sizeFilter; j++){
+                filter[i][j]=1/(float)(sizeFilter*sizeFilter);
             }
         }
     }
@@ -43,10 +43,10 @@ public class Filter {
      * @param sigma is the standard deviation of the gaussian distribution.
      */
     public void setGauss(double sigma){
-        int [][] matrixIndex = new int [sizefilter*sizefilter][2];
+        int [][] matrixIndex = new int [sizeFilter*sizeFilter][2];
         int index=0;
         float totalValue=0;
-        if(sizefilter==3){
+        if(sizeFilter==3){
             matrixIndex [0][0] = -1;
             matrixIndex [0][1] = -1;
             matrixIndex [1][0] = 0;
@@ -70,19 +70,19 @@ public class Filter {
             float ratio = 0;
             float fraction = 1/(float)(2*Math.PI*sigma*sigma);
 
-            for(int i=0; i<sizefilter;i++){
-                for(int j=0; j<sizefilter; j++){
+            for(int i=0; i<sizeFilter;i++){
+                for(int j=0; j<sizeFilter; j++){
 
                     float exp = (float)Math.exp(-( (matrixIndex[index][0]*matrixIndex[index][0] +matrixIndex[index][1]*matrixIndex[index][1])  / ((2*sigma*sigma))     ));
-                    float calculus = fraction *exp;
+                    float res = fraction *exp;
 
                     index++;
-                    filter[i][j] = calculus;
+                    filter[i][j] = res;
                     totalValue=totalValue + filter [i][j];
                 }
             }
-            for(int i=0; i<sizefilter; i++){
-                for(int j=0; j<sizefilter; j++){
+            for(int i=0; i<sizeFilter; i++){
+                for(int j=0; j<sizeFilter; j++){
                     filter[i][j] *=1/totalValue;
                 }
             }
@@ -90,7 +90,7 @@ public class Filter {
     }
 
     public void setSobelVertical(){
-        if(sizefilter == 3) {
+        if(sizeFilter == 3) {
             filter[0][0] = -1;
             filter[0][1] = 0;
             filter[0][2] = 1;
@@ -102,7 +102,7 @@ public class Filter {
             filter[2][2] = 1;
         }
 
-        if(sizefilter == 5) {
+        if(sizeFilter == 5) {
             filter[0][0] = -1;
             filter[0][1] = -2;
             filter[0][2] = 0;
@@ -132,7 +132,7 @@ public class Filter {
     }
 
     public void setSobelHorizontal(){
-        if(sizefilter == 3){
+        if(sizeFilter == 3){
             filter[0][0] = -1;
             filter[0][1] = -2;
             filter[0][2] = -1;
@@ -143,7 +143,7 @@ public class Filter {
             filter[2][1] = 2;
             filter[2][2] = 1;
         }
-        if(sizefilter == 5){
+        if(sizeFilter == 5){
             filter[0][0] = -1;
             filter[0][1] = -4;
             filter[0][2] = -6;
@@ -173,7 +173,7 @@ public class Filter {
     }
 
     public void setLaplace(){
-        if(sizefilter==3) {
+        if(sizeFilter==3) {
             setGauss(0.8);
             for (int i = 0; i < 5; i++)
                 ImgProcessing.convolution(3, Constants.GAUSS);
@@ -191,7 +191,7 @@ public class Filter {
     }
 
     public void setLaplace2(){
-        if(sizefilter==3) {
+        if(sizeFilter==3) {
             setGauss(0.8);
             for (int i = 0; i < 5; i++)
                 ImgProcessing.convolution(3, Constants.GAUSS);

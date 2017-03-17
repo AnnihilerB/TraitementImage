@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         mainContext = getApplicationContext();
 
         //Creating a blank image.
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena_color);
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena);
         image = new Img(bitmap);
         imageHide = new Img();
         ImgProcessing.setImage(image);
@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 checkPermissions();
-                //startGallery();
                 startGallery(Constants.GALLERY_NORMAL);
             }
         });

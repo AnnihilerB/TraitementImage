@@ -35,10 +35,10 @@ public class ImgProcessingTest{
 
         boolean res = true;
         ImgProcessing.setImage(image);
-        ImgProcessing.colorize();
+        ImgProcessing.colorize(0);
         float[] hsv = new float[3];
 
-        int[] pixelArray = image.getArraypixel();
+        int[] pixelArray = image.getArrayPixel();
         for (int i = 0; i < pixelArray.length; i++){
             Color.colorToHSV(pixelArray[i], hsv);
             if (hsv[0] != (float)120) {
