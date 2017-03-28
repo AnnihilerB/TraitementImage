@@ -1,6 +1,8 @@
-package com.soft.ali.traitementimage;
+package com.soft.ali.traitementimage.histogram;
 
 import android.graphics.Color;
+
+import com.soft.ali.traitementimage.Constants;
 
 /**
  * Created by ali on 11/02/2017.
@@ -13,12 +15,10 @@ public class Histogram {
      */
 
     private int[] hist;
-    private int[] cumulHist;
     private int nbpixels = 0;
 
     public Histogram() {
         hist = new int[Constants.NBCOLORS];
-        cumulHist = new int[Constants.NBCOLORS];
     }
 
     /**
@@ -38,21 +38,6 @@ public class Histogram {
             int val  = (int)(hsv[channel] * 255);
             hist[val]++;
         }
-
-        int cumul = 0;
-        for (int i = 0; i < Constants.NBCOLORS; i++){
-            cumul = hist[i] + cumul;
-            cumulHist[i] = cumul;
-        }
-    }
-
-    /**
-     * Getting the value in the cumulative histogram.
-     * @param index index of the array
-     * @return the value gathered at index.
-     */
-    public int getCumulativeHistogramValueAt(int index){
-        return cumulHist[index];
     }
 
     /**
@@ -66,6 +51,10 @@ public class Histogram {
 
     public int getNbPixels(){
         return nbpixels;
+    }
+
+    public int[] getHistogram(){
+        return this.hist;
     }
 
 
