@@ -49,6 +49,7 @@ public class ValuePicker extends AppCompatActivity{
 
         final SeekBar seekBarSizeFilter = (SeekBar) findViewById(R.id.seekBarSizeFilter);
         final TextView sizeFilterValueText = (TextView) findViewById(R.id.textSizeFilterValue);
+        seekBarSizeFilter.incrementProgressBy(2);
 
         final SeekBar seekBarTypeFilter = (SeekBar) findViewById(R.id.seekBarTypeFilter);
         final TextView typeFilterValueText = (TextView) findViewById(R.id.textTypeFilterValue);
@@ -117,8 +118,9 @@ public class ValuePicker extends AppCompatActivity{
         seekBarSizeFilter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sizeFilterValue = progress;
-                sizeFilterValueText.setText(String.valueOf(seekBar.getProgress()));
+                int value = 2*progress+1;
+                sizeFilterValue = value;
+                sizeFilterValueText.setText(String.valueOf(value) );
 
             }
             @Override
@@ -156,7 +158,7 @@ public class ValuePicker extends AppCompatActivity{
                 Intent result = new Intent();
                 result.putExtra("hueValue", hueValue);
                 result.putExtra("colorValue", colorValue);
-                result.putExtra("sizeFilterValue", sizeFilterValue);
+                result.putExtra("sizeFilterValue", 2*sizeFilterValue);
                 result.putExtra("typeFilterValue", typeFilterValue);
                 setResult(RESULT_OK, result);
                 finish();
