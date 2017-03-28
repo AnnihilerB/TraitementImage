@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         mainContext = getApplicationContext();
 
         //Creating a blank image.
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena_color);
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.contraste);
         image = new Img(bitmap);
         imageHide = new Img();
         ImgProcessing.setImage(image);

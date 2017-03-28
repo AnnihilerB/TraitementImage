@@ -155,5 +155,5 @@
         android:layout_height="match_parent"
         android:layout_above="@id/scroll"
         android:scaleType="matrix"
-        android:src="@drawable/lena"/>
+        android:src="@drawable/contraste"/>
 </RelativeLayout>
