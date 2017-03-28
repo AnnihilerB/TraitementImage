@@ -22,8 +22,8 @@ import android.widget.TextView;
 
 public class ValuePicker extends AppCompatActivity{
 
-    private int hueValue=0;
-    private int colorValue=0;
+    private int hueValue=120;
+    private int colorValue=Color.RED;
     private int sizeFilterValue=3;
     private int typeFilterValue=1;
 
