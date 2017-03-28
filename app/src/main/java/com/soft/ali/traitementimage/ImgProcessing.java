@@ -3,6 +3,9 @@ package com.soft.ali.traitementimage;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import com.soft.ali.traitementimage.histogram.CumulativeHistogram;
+import com.soft.ali.traitementimage.histogram.Histogram;
+
 /**
  * Created by ali on 27/01/2017.
  */
@@ -41,18 +44,21 @@ public class ImgProcessing {
      */
     public static void histogramEqualization(){
         Histogram hist = new Histogram();
+        CumulativeHistogram cumulativeHistogram = new CumulativeHistogram();
+
         int pixels[] = image.getArraypixel();
-
         int channel = Constants.HSV_VIBRANCE;
-        hist.generateHSVHistogram(pixels, channel);
-        int nbPixels = hist.getNbPixels();
 
+        hist.generateHSVHistogram(pixels, channel);
+        cumulativeHistogram.generateCumulativeHistogram(hist.getHistogram());
+
+        int nbPixels = hist.getNbPixels();
         float[] hsv = new float[3];
 
         for (int i = 0; i < pixels.length; i++){
             Color.colorToHSV(pixels[i], hsv);
             int val = (int)(hsv[channel] * 255); //Rescaling the value
-            hsv[channel] = ((float) hist.getCumulativeHistogramValueAt(val) / (float)nbPixels);
+            hsv[channel] = ((float) cumulativeHistogram.getCumulativeHistogramValueAt(val) / (float)nbPixels);
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
