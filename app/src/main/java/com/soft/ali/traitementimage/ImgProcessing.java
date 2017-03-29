@@ -144,62 +144,62 @@ public class ImgProcessing {
         }
     }
 
+    private static int floorMod(int a, int b) {
+        int r = a % b;
+        if (r < 0)
+            r += b;
+        return r;
+    }
+
     /**
      * This method applied the filter on the chosen image, for the moment only the 3*3 matrix are functionnal.
      * The edge of the picture are not processed.
      * @param filterMatrix the filter to apply.
-     * @param sizefilter the size of the filer (odd number).
+     * @param sizeFilter the size of the filer (odd number).
      */
-    private static void calculConvolution(float [][] filterMatrix, int sizefilter) {
+    private static void calculConvolution(float [][] filterMatrix, int sizeFilter) {
         int pixels[] = image.getArrayPixel();
         int originalPixels[] = pixels.clone();
 
         int width = image.getWidth();
         int height = image.getHeight();
-        //Index used to avoid edging pixels.
-        int index = width + 1;
 
         int r, g, b;
 
-        //This loop avoids to process the edge of the image.
-        //The filter is applied on each RGB channel separately.
-        for (int i = 1; i < height - 1; i++) {
-            for (int j = 1; j < width - 1; j++) {
-                r = (int) ((Color.red(originalPixels[index - 1 - width]) * filterMatrix[0][0])
-                        + (Color.red(originalPixels[index - width]) * filterMatrix[0][1])
-                        + (Color.red(originalPixels[index + 1 - width]) * filterMatrix[0][2])
-                        + (Color.red(originalPixels[index - 1]) * filterMatrix[1][0])
-                        + (Color.red(originalPixels[index]) * filterMatrix[1][1])
-                        + (Color.red(originalPixels[index + 1]) * filterMatrix[1][2])
-                        + (Color.red(originalPixels[index - 1 + width]) * filterMatrix[2][0])
-                        + (Color.red(originalPixels[index + width]) * filterMatrix[2][1])
-                        + (Color.red(originalPixels[index + 1 + width])) * filterMatrix[2][2]);
-                g = (int) ((Color.green(originalPixels[index - 1 - width]) * filterMatrix[0][0])
-                        + (Color.green(originalPixels[index - width]) * filterMatrix[0][1])
-                        + (Color.green(originalPixels[index + 1 - width]) * filterMatrix[0][2])
-                        + (Color.green(originalPixels[index - 1]) * filterMatrix[1][0])
-                        + (Color.green(originalPixels[index]) * filterMatrix[1][1])
-                        + (Color.green(originalPixels[index + 1]) * filterMatrix[1][2])
-                        + (Color.green(originalPixels[index - 1 + width]) * filterMatrix[2][0])
-                        + (Color.green(originalPixels[index + width]) * filterMatrix[2][1])
-                        + (Color.green(originalPixels[index + 1 + width])) * filterMatrix[2][2]);
-                b = (int) ((Color.blue(originalPixels[index - 1 - width]) * filterMatrix[0][0])
-                        + (Color.blue(originalPixels[index - width]) * filterMatrix[0][1])
-                        + (Color.blue(originalPixels[index + 1 - width]) * filterMatrix[0][2])
-                        + (Color.blue(originalPixels[index - 1]) * filterMatrix[1][0])
-                        + (Color.blue(originalPixels[index]) * filterMatrix[1][1])
-                        + (Color.blue(originalPixels[index + 1]) * filterMatrix[1][2])
-                        + (Color.blue(originalPixels[index - 1 + width]) * filterMatrix[2][0])
-                        + (Color.blue(originalPixels[index + width]) * filterMatrix[2][1])
-                        + (Color.blue(originalPixels[index + 1 + width])) * filterMatrix[2][2]);
-
-                pixels[index] = Color.rgb(r, g, b);
-                index++;
+        // Calculates the maximum and minimum output of the convolution with the given mask
+        float max_value = 0;
+        float min_value = 0;
+        for(int i = 0; i < filterMatrix.length; i++) {
+            for (int j = 0; j < filterMatrix.length; j++) {
+                if (filterMatrix[i][j] >= 0)
+                    max_value += filterMatrix[i][j] * 255;
+                else
+                    min_value += filterMatrix[i][j] * 255;
             }
-            //Going to the next "line" of the image
-            index += 2;
         }
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int value = 0;
+
+                for (int i = 0; i < filterMatrix.length; i++) {
+                    for (int j = 0; j < filterMatrix.length; j++) {
+                        int yPrime = floorMod(y + i - (pixels.length - 1) / 2, height);
+                        int xPrime = floorMod(x + j - (pixels.length - 1) / 2, width);
+                        value += (0x000000FF & pixels[yPrime * width + xPrime]) * filterMatrix[i][j];
+                    }
+                }
+
+                // Checks if the output is not in [0,255] and uses the appropriate bijection to fix it
+                if (value > 255 || value < 0)
+                    value = (int) ((value - min_value)/(max_value - min_value)) * 255;
+
+                pixels[y * width + x] = 0xFF000000 | (value << 16) | (value << 8) | value;
+            }
+        }
+
     }
+
     /**
      * This function increase the brightness value of all pixels of a picture by an arbitrary value.
      */
