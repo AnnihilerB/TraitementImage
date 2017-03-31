@@ -1,6 +1,7 @@
 package com.soft.ali.traitementimage;
 
 import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -13,6 +14,8 @@ import android.view.View;
  * This class implements a new OnTouchListener.
  * This listener allows us to control the events.
  *  The listener is made by overriding the onTouch method.
+ *
+ *  NB : The scroll code is highly inspired from the book 'Hello Android' by Ed Burnette.
  */
 public class ScrollZoomListener implements View.OnTouchListener {
 
