@@ -129,12 +129,16 @@ public class ImgProcessing {
             int[] pixelVertical = image.getArrayPixel().clone();
 
             int[]pixels = image.getArrayPixel();
+
             int r,g,b;
+
             for (int i =0; i < pixelHorizontal.length; i++){
+
                 r = (int) (Math.sqrt(Math.pow(Color.red(pixelHorizontal[i]),2) + Math.pow(Color.red(pixelVertical[i]), 2)));
                 g = (int) (Math.sqrt(Math.pow(Color.green (pixelHorizontal[i]),2) + Math.pow(Color.green(pixelVertical[i]), 2)));
                 b = (int) (Math.sqrt(Math.pow(Color.blue(pixelHorizontal[i]),2) + Math.pow(Color.blue(pixelVertical[i]), 2)));
                 pixels[i] = Color.rgb(r, g ,b);
+
             }
 
         }
@@ -169,8 +173,6 @@ public class ImgProcessing {
         int width = image.getWidth();
         int height = image.getHeight();
 
-        int r, g, b;
-
         // Calculates the maximum and minimum output of the convolution with the given mask
         float max_value = 0;
         float min_value = 0;
@@ -189,17 +191,19 @@ public class ImgProcessing {
 
                 for (int i = 0; i < filterMatrix.length; i++) {
                     for (int j = 0; j < filterMatrix.length; j++) {
-                        int yPrime = floorMod(y + i - (pixels.length - 1) / 2, height);
+                        int yPrime = floorMod(y - (pixels.length - 1) / 2 +i, height);
                         int xPrime = floorMod(x + j - (pixels.length - 1) / 2, width);
-                        value += (0x000000FF & pixels[yPrime * width + xPrime]) * filterMatrix[i][j];
+                        value += (0x000000FF & originalPixels[yPrime * width + xPrime]) * filterMatrix[i][j];
                     }
                 }
+
+                int alpha = (originalPixels[y * width + x] & 0xFF000000) >> 24;
 
                 // Checks if the output is not in [0,255] and uses the appropriate bijection to fix it
                 if (value > 255 || value < 0)
                     value = (int) ((value - min_value)/(max_value - min_value)) * 255;
 
-                pixels[y * width + x] = 0xFF000000 | (value << 16) | (value << 8) | value;
+                pixels[y * width + x] = (alpha << 24) | (value << 16) | ( value << 8) | value;
             }
         }
 

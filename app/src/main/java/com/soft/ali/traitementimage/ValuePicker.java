@@ -41,7 +41,7 @@ public class ValuePicker extends AppCompatActivity{
 
         final SeekBar seekBarColor = (SeekBar) findViewById(R.id.seekBarColor);
         //Displaying a gradient so the user can see which color he is picking.
-        LinearGradient linearGradient = new LinearGradient(0.f, 0.f, 720.f, 0.0f, new int[]{0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF, 0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF}, null, Shader.TileMode.CLAMP); //Draw a color bar from black to white.
+        LinearGradient linearGradient = new LinearGradient(0.f, 0.f, 720.f, 0.0f, new int[]{0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF, 0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF}, null, Shader.TileMode.CLAMP); //linear gradient : Create a shader that draws a linear gradient along a line. Draw a color bar from black to white.
         ShapeDrawable shape = new ShapeDrawable(new RectShape());
         shape.getPaint().setShader(linearGradient);
         seekBarColor.setProgressDrawable(shape);
@@ -54,7 +54,10 @@ public class ValuePicker extends AppCompatActivity{
         final SeekBar seekBarTypeFilter = (SeekBar) findViewById(R.id.seekBarTypeFilter);
         final TextView typeFilterValueText = (TextView) findViewById(R.id.textTypeFilterValue);
 
-
+        /**
+         * When the user touch the seek bar, it change the progress value and launch the listener corresponding to the seekbar.
+         * The textview change and the global values huevalue, colorvalue, sizefiltervalue, typefiltervalue.
+         */
         seekBarHue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
