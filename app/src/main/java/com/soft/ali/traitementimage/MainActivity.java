@@ -11,12 +11,18 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.google.common.base.Stopwatch;
+import com.soft.ali.traitementimage.processing.HistogramEqua;
+import com.soft.ali.traitementimage.threads.ProcessingThreads;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,7 +97,24 @@ public class MainActivity extends AppCompatActivity {
         buttonGray.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.toGray();
+                ProcessingThreads processing = new ProcessingThreads(4, image.getWidth() * image.getHeight(), new HistogramEqua());
+                ImgProcessing.generateHist();
+                try {
+                    Stopwatch timer = Stopwatch.createStarted();
+                    processing.startThreads();
+                    Log.i("TIME", "Threads " + String.valueOf(timer.stop()));
+
+                    image.resetArrayPixels();
+                    imgView.setImageBitmap(image.getOriginalBitmap());
+
+                    Stopwatch timer2 = Stopwatch.createStarted();
+                    ImgProcessing.histogramEqualization(0, image.getWidth() * image.getHeight());
+                    Log.i("TIME", "Sans Threads " + String.valueOf(timer2.stop()));
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //ImgProcessing.toGray();
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -107,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         buttonEqualization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.histogramEqualization();
+                //ImgProcessing.histogramEqualization();
                 Utils.updateImageView(image, imgView);
             }
         });

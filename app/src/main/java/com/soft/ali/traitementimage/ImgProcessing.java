@@ -13,6 +13,9 @@ import com.soft.ali.traitementimage.histogram.Histogram;
 public class ImgProcessing {
 
     private static Img image;
+   static  Histogram hist;
+    static CumulativeHistogram cumulativeHistogram;
+    static int []pixels;
 
 
     /**
@@ -38,29 +41,36 @@ public class ImgProcessing {
      * the V channel of the HSV colorspace.
      * First, an histogram and a cumulative histogram are generated.
      * Each pixel is converted into HSV. As the V component is between 0 and 1, the component is
-     * rescaled to be between 0 and 255.
+     * rescaled to fit between 0 and 255.
      * Then we get the value of the V component in the cumulative histogram. Then, this value is
      * divided by the number of pixels in order to rescale it between 0 and 1.
      */
-    public static void histogramEqualization(){
-        Histogram hist = new Histogram();
-        CumulativeHistogram cumulativeHistogram = new CumulativeHistogram();
+    public static void histogramEqualization(int lower, int upper){
 
-        int pixels[] = image.getArraypixel();
         int channel = Constants.HSV_VIBRANCE;
 
-        hist.generateHSVHistogram(pixels, channel);
-        cumulativeHistogram.generateCumulativeHistogram(hist.getHistogram());
 
-        int nbPixels = hist.getNbPixels();
+
+        float nbPixels = (float)hist.getNbPixels();
         float[] hsv = new float[3];
 
-        for (int i = 0; i < pixels.length; i++){
+        for (int i = lower; i < upper; i++){
             Color.colorToHSV(pixels[i], hsv);
             int val = (int)(hsv[channel] * 255); //Rescaling the value
-            hsv[channel] = ((float) cumulativeHistogram.getCumulativeHistogramValueAt(val) / (float)nbPixels);
+            hsv[channel] = ((float) cumulativeHistogram.getCumulativeHistogramValueAt(val) / nbPixels);
             pixels[i] = Color.HSVToColor(hsv);
         }
+    }
+
+    public static void generateHist(){
+        pixels = image.getArraypixel();
+
+        hist = new Histogram();
+        cumulativeHistogram = new CumulativeHistogram();
+
+        hist.generateHSVHistogram(pixels, Constants.HSV_VIBRANCE);
+        cumulativeHistogram.generateCumulativeHistogram(hist.getHistogram());
+
     }
 
 
@@ -87,12 +97,12 @@ public class ImgProcessing {
 
 
 
-    public static void toGray(){
+    public static void toGray(int lower, int upper){
         int red, green, blue;
         int rgb, total;
         int pixels[] = image.getArraypixel();
 
-        for (int i = 0; i < pixels.length; i++) {
+        for (int i = lower; i < upper; i++) {
             rgb = pixels[i];
             red = ((Color.red(rgb)*3)/10);
             green = ((Color.green(rgb)*59)/100);
