@@ -2,6 +2,7 @@ package com.soft.ali.traitementimage;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.soft.ali.traitementimage.histogram.CumulativeHistogram;
 import com.soft.ali.traitementimage.histogram.Histogram;
@@ -363,6 +364,52 @@ public class ImgProcessing {
         image = imagebase;
     }
 
+    /**
+     * Reverse the color of a grayscale image.
+     * Constructs a LUT containing the reversed colors and then changes every pixels.
+     */
+    public static void reverseImg(){
+        ImgProcessing.toGray();
+        int pixels[] = image.getArrayPixel();
+
+        LUT reversedColors = new LUT();
+        reversedColors.generateReversedLUT();
+
+        for(int i = 0; i < pixels.length; i ++){
+            int value  = (int)reversedColors.getValueAt(Color.red(pixels[i]));
+            pixels[i] = Color.rgb(value, value, value);
+        }
+    }
+
+    /**
+     * Transform the image to simulate a sketch effect.
+     * The image is transformed into grayscale.
+     * A copy of this image is reversed and a Gaussian filter is applied.
+     * The two images are blend using the Linear dodge process. (http://www.wikiwand.com/en/Blend_modes#/Dodge_and_burn).
+     */
+    public static void sketchImage(){
+
+        Log.i("REV", "Gray first image");
+        ImgProcessing.toGray();
+        int[] originalPixels = image.getArrayPixel().clone();
+
+        Log.i("REV", "Reversing");
+        ImgProcessing.reverseImg();
+        Log.i("REV", "Convolution");
+        ImgProcessing.convolution(3, Constants.GAUSS);
+
+
+        int reversedPixels[]  = image.getArrayPixel();
+
+        Log.i("REV", "Blending");
+        for (int i = 0; i < originalPixels.length; i++){
+            int value = (Color.red(reversedPixels[i]) + Color.red(originalPixels[i]));
+            if (value > 255){
+                value  = 150;
+            }
+            reversedPixels[i] = Color.rgb(value, value, value);
+        }
+    }
 }
 
 
