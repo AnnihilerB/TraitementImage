@@ -70,4 +70,9 @@ public class LUT {
         min =((minR+minG+minB) / 3)/(float)255;
         max = ((maxR+maxG+maxB) / 3)/(float)255;
     }
+
+    public void generateReversedLUT(){
+        for (int i = 0; i < table.length; i ++)
+            table[i] = 255 - i;
+    }
 }
