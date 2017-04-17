@@ -15,7 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.io.File;
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private int sizeFilterValue = 3;
     private int typeFilterValue = 1;
 
+    //Used only for contrast enhancement.
+    int pixelsContrast[];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mainContext = getApplicationContext();
 
         //Creating a blank image.
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.contraste);
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena);
         image = new Img(bitmap);
         imageHide = new Img();
         ImgProcessing.setImage(image);
@@ -61,11 +66,73 @@ public class MainActivity extends AppCompatActivity {
         Button buttonIsolate = (Button) findViewById(R.id.buttonIsolate);
         Button buttonSepia = (Button) findViewById(R.id.buttonSepia);
         Button buttonHide = (Button) findViewById(R.id.buttonImgHide);
+        Button buttonSketch = (Button)findViewById(R.id.buttonSketch);
+        Button buttonOkContrast = (Button)findViewById(R.id.buttonOkContrast);
+
+        HorizontalScrollView scroll =  (HorizontalScrollView)findViewById(R.id.scroll);
+        SeekBar contrastBar = (SeekBar)findViewById(R.id.contrastBar);
+
+        //Values of the seekbar between 0 and 510 to allow negative values to reduce contrast.
+        contrastBar.setMax(510);
+
         ImageButton buttonRes = (ImageButton) findViewById(R.id.buttonReset);
         ImageButton buttonValue = (ImageButton) findViewById(R.id.buttonValue);
         ImageButton buttonSave = (ImageButton)findViewById(R.id.buttonSave);
         ImageButton buttonLoadCamera = (ImageButton)findViewById(R.id.buttonLoadCamera);
         ImageButton buttonLoadGallery = (ImageButton)findViewById(R.id.buttonLoadGallery);
+        ImageButton buttonContrast = (ImageButton)findViewById(R.id.buttonContrast);
+
+        buttonOkContrast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scroll.setVisibility(View.VISIBLE);
+                buttonOkContrast.setVisibility(View.INVISIBLE);
+                contrastBar.setVisibility(View.INVISIBLE);
+
+            }
+        });
+
+        buttonContrast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scroll.setVisibility(View.INVISIBLE);
+                buttonOkContrast.setVisibility(View.VISIBLE);
+                contrastBar.setVisibility(View.VISIBLE);
+                //Getting the pixels when we need to change the contrast. Allowing us to always have the same originals pixels.
+                pixelsContrast = image.getArrayPixel().clone();
+            }
+        });
+
+        contrastBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                int value = seekBar.getProgress();
+                //Reducing the value to fit between -255 and 255.
+                value -= 255;
+                ImgProcessing.contrastAdjust(pixelsContrast, value);
+                Utils.updateImageView(image, imgView);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+
+        buttonSketch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImgProcessing.sketchImage();
+                Utils.updateImageView(image, imgView);
+            }
+        });
 
         buttonLoadCamera.setOnClickListener(new View.OnClickListener() {
             @Override
