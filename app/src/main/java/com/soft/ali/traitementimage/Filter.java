@@ -170,9 +170,6 @@ public class Filter {
 
     public void setLaplace(){
         if(sizeFilter==3) {
-            setGauss(0.8);
-            for (int i = 0; i < 5; i++)
-                ImgProcessing.convolution(3, Constants.GAUSS);
             filter[0][0] = 0;
             filter[0][1] = 1;
             filter[0][2] = 0;
@@ -188,18 +185,15 @@ public class Filter {
 
     public void setLaplace2(){
         if(sizeFilter==3) {
-            setGauss(0.8);
-            for (int i = 0; i < 5; i++)
-                ImgProcessing.convolution(3, Constants.GAUSS);
-            filter[0][0] = 1;
-            filter[0][1] = 1;
-            filter[0][2] = 1;
-            filter[1][0] = 1;
-            filter[1][1] = -8;
-            filter[1][2] = 1;
-            filter[2][0] = 1;
-            filter[2][1] = 1;
-            filter[2][2] = 1;
+            filter[0][0] = -1;
+            filter[0][1] = -1;
+            filter[0][2] = -1;
+            filter[1][0] = -1;
+            filter[1][1] = 8;
+            filter[1][2] = -1;
+            filter[2][0] = -1;
+            filter[2][1] = -1;
+            filter[2][2] = -1;
         }
     }
 }
