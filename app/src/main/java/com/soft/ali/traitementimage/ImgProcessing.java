@@ -349,7 +349,7 @@ public class ImgProcessing {
     /**
      * Get fourth first byte of binary string of a rgb arg
      * @param rgbArg
-     * @return
+     * @return The fourth byte of a String
      */
     public static String getFirstsBinaryValue(int rgbArg){
         String binaryString =Integer.toBinaryString(rgbArg);
@@ -405,10 +405,43 @@ public class ImgProcessing {
         for (int i = 0; i < originalPixels.length; i++){
             int value = (Color.red(reversedPixels[i]) + Color.red(originalPixels[i]));
             if (value > 255){
-                value  = 150;
+                value  = 120;
             }
             reversedPixels[i] = Color.rgb(value, value, value);
         }
+    }
+
+    /**
+     * Adjust the contrast of the current image displayed on screen.
+     * The contrast method has been found here :
+     * http://www.dfstudios.co.uk/articles/programming/image-programming-algorithms/image-processing-algorithms-part-5-contrast-adjustment/
+     * @param contrast The contrast value the user wants..
+     */
+    public static void contrastAdjust(int[] originalPixels, int contrast){
+        int pixels[] = image.getArrayPixel();
+
+        float factor = (259 * (contrast + 255)) /(float) (255 * (259 - contrast));
+
+        for (int i = 0; i < pixels.length; i++){
+            int color = originalPixels[i];
+            int r = Math.round(truncate(factor * (Color.red(color)  - 128) + 128));
+            int g = Math.round(truncate(factor * (Color.green(color)  - 128) + 128));
+            int b = Math.round(truncate(factor * (Color.blue(color)  - 128) + 128));
+            pixels[i] = Color.rgb(r,g,b);
+        }
+    }
+
+    /**
+     * Truncate a color value in order to fit between 0 and 255.
+     * @param val the value to truncate
+     * @return the truncate value or the initial value if no truncating needed.
+     */
+    private static float truncate (float val){
+        if (val > 255)
+            return 255;
+        if (val < 0)
+            return 0;
+        return val;
     }
 }
 
