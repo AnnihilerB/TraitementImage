@@ -8,6 +8,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -123,7 +124,8 @@ public class ValuePicker extends AppCompatActivity{
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 int value = 2*progress+1;
                 sizeFilterValue = value;
-                sizeFilterValueText.setText(String.valueOf(value) );
+                sizeFilterValueText.setText(String.valueOf(value));
+                Log.i("CONV", "Dans seekbar : " + String.valueOf(value));
 
             }
             @Override
@@ -161,7 +163,7 @@ public class ValuePicker extends AppCompatActivity{
                 Intent result = new Intent();
                 result.putExtra("hueValue", hueValue);
                 result.putExtra("colorValue", colorValue);
-                result.putExtra("sizeFilterValue", 2*sizeFilterValue);
+                result.putExtra("sizeFilterValue", sizeFilterValue);
                 result.putExtra("typeFilterValue", typeFilterValue);
                 setResult(RESULT_OK, result);
                 finish();
