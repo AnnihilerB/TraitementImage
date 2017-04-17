@@ -1,7 +1,5 @@
 package com.soft.ali.traitementimage;
 
-import android.widget.Toast;
-
 /**
     This class create a two dimension array of floats which stores the values of the different filters (Average, Gauss, Sobel and Laplace) by calling the "set" methods.
     For create the class the user need to give a size filter.
@@ -13,8 +11,8 @@ public class Filter {
     private float filter [] [];
     private int sizeFilter;
 
-    public Filter (int nfilter){
-        sizeFilter=nfilter;
+    public Filter (int nFilter){
+        sizeFilter=nFilter;
         filter = new float[sizeFilter] [sizeFilter];
     }
 
@@ -66,8 +64,6 @@ public class Filter {
             matrixIndex [8][0] = 1;
             matrixIndex [8][1] = 1;
 
-            //Ratio is used to set the matrix corner value to one.
-            float ratio = 0;
             float fraction = 1/(float)(2*Math.PI*sigma*sigma);
 
             for(int i=0; i<sizeFilter;i++){

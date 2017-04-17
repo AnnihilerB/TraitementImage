@@ -31,9 +31,6 @@ public class Constants {
     //Int constants
     public static final int NBCOLORS = 256;
 
-    //Log string constants
-    public static final String POINTER = "PTR";
-
     //HSV constants
     public  static final int HSV_HUE = 0;
     public  static final int HSV_SATURATION = 1;

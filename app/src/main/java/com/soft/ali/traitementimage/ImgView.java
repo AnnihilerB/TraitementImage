@@ -13,7 +13,7 @@ import android.widget.ImageView;
  * We will keep the basic display (Android rescaling)  and then it will be possible to zoom (in and out) and scroll on the image.
  */
 
-public class ImgView  extends ImageView {
+public class ImgView  extends android.support.v7.widget.AppCompatImageView {
 
     public ImgView(Context context) {
         super(context);

@@ -19,7 +19,7 @@ import android.view.View;
  */
 public class ScrollZoomListener implements View.OnTouchListener {
 
-    //Postion of the first finger
+    //Position of the first finger
     private float curX = 0;
     private float curY = 0;
 

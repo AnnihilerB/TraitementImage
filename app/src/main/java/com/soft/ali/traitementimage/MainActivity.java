@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         HorizontalScrollView scroll =  (HorizontalScrollView)findViewById(R.id.scroll);
         SeekBar contrastBar = (SeekBar)findViewById(R.id.contrastBar);
 
-        //Values of the seekbar between 0 and 510 to allow negative values to reduce contrast.
+        //Values of the seekBar between 0 and 510 to allow negative values to reduce contrast.
         contrastBar.setMax(510);
 
         ImageButton buttonRes = (ImageButton) findViewById(R.id.buttonReset);

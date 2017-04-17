@@ -56,7 +56,7 @@ public class ValuePicker extends AppCompatActivity{
 
         /**
          * When the user touch the seek bar, it change the progress value and launch the listener corresponding to the seekbar.
-         * The textview change and the global values huevalue, colorvalue, sizefiltervalue, typefiltervalue.
+         * The textView change and the global values hueValue, colorValue, sizeFilterValue, typeFilterValue.
          */
         seekBarHue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
