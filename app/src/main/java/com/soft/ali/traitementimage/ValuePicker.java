@@ -8,7 +8,6 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -55,7 +54,7 @@ public class ValuePicker extends AppCompatActivity{
         final SeekBar seekBarTypeFilter = (SeekBar) findViewById(R.id.seekBarTypeFilter);
         final TextView typeFilterValueText = (TextView) findViewById(R.id.textTypeFilterValue);
 
-        /**
+        /*
          * When the user touch the seek bar, it change the progress value and launch the listener corresponding to the seekbar.
          * The textView change and the global values hueValue, colorValue, sizeFilterValue, typeFilterValue.
          */
@@ -75,7 +74,9 @@ public class ValuePicker extends AppCompatActivity{
 
         seekBarColor.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { //In function of the progress value, a rgb pixel value is calculated and store in the colorValue parameter.
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                //In function of the progress value, a rgb pixel value is calculated and store in the colorValue parameter.
+                // code inspired by this one : http://stackoverflow.com/questions/26919050/android-simple-color-picker
                 if(fromUser){
                     int r = 0;
                     int g = 0;
@@ -125,8 +126,6 @@ public class ValuePicker extends AppCompatActivity{
                 int value = 2*progress+1;
                 sizeFilterValue = value;
                 sizeFilterValueText.setText(String.valueOf(value));
-                Log.i("CONV", "Dans seekbar : " + String.valueOf(value));
-
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {

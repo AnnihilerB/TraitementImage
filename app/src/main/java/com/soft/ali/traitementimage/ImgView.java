@@ -2,11 +2,6 @@ package com.soft.ali.traitementimage;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ImageView;
-
-/**
- * Created by ali on 27/01/2017.
- */
 
 /**
  * Making our own ImageView class allows us to control what's displayed on the screen.

@@ -1,13 +1,8 @@
 package com.soft.ali.traitementimage;
 
 import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
-
-/**
- * Created by ali on 28/01/2017.
- */
 
 
 /**
@@ -55,8 +50,6 @@ public class ScrollZoomListener implements View.OnTouchListener {
         ImgView imgView = (ImgView) view;
         // index is the index of the first finger in the event queue.
         int index = motionEvent.getActionIndex();
-        //Getting the IDs of the others fingers.
-        int pointerID = motionEvent.getPointerId(index);
 
         //New finger location when dragging
         float newX, newY;

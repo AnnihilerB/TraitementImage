@@ -15,7 +15,6 @@ public class Histogram {
      */
 
     private int[] hist;
-    private int nbpixels = 0;
 
     public Histogram() {
         hist = new int[Constants.NBCOLORS];
@@ -27,8 +26,6 @@ public class Histogram {
      * @param channel the HSV channel to be used.
      */
     public void generateHSVHistogram(int []pix, int channel) {
-
-        nbpixels = pix.length;
 
         float[] hsv = new float[3];
 
@@ -49,10 +46,10 @@ public class Histogram {
         return hist[index];
     }
 
-    public int getNbPixels(){
-        return nbpixels;
-    }
-
+    /**
+     * Return the histogram of the current image.
+     * @return the histogram.
+     */
     public int[] getHistogram(){
         return this.hist;
     }

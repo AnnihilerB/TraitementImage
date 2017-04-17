@@ -11,10 +11,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -22,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.google.common.base.Stopwatch;
 import com.soft.ali.traitementimage.processing.Colorize;
 import com.soft.ali.traitementimage.processing.ContrastAdjust;
 import com.soft.ali.traitementimage.processing.ExtendDynamism;
@@ -50,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private int typeFilterValue = 1;
 
     //Used only for contrast enhancement.
-    int pixelsContrast[];
+    private int[] pixelsContrast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -393,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
 
         //================== VALUE PICKER ===================//
 
-        if (requestCode == Constants.PICKER_VALUE && resultCode == RESULT_OK && resultCode == RESULT_OK && data != null) {
+        if (requestCode == Constants.PICKER_VALUE && resultCode == RESULT_OK && data != null) {
             hueValue = data.getIntExtra("hueValue", 120);
             colorValue = data.getIntExtra("colorValue", 120);
             sizeFilterValue = data.getIntExtra("sizeFilterValue", 3);
@@ -422,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
      * Can be used to setup an image or to hide an image
      * @param choice setting up or hiding an image.
      */
-    public void startGallery(int choice) {
+    private void startGallery(int choice) {
         // Create the Intent for Image Gallery.
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start new activity with the LOAD_IMAGE_RESULTS to handle back the results when image is picked from the Image Gallery.
@@ -455,9 +452,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * @param image
-     * @param imageToHide
-     * @return
+     * @param image source image
+     * @param imageToHide image to hide
+     * @return true if the image has the same size, false instead.
      */
     private boolean checkPicturesSize(Img image, Img imageToHide) {
         return ((image.getHeight() == imageToHide.getHeight()) & (image.getWidth() == imageToHide.getWidth()));

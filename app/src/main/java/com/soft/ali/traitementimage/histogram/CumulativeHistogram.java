@@ -14,6 +14,10 @@ public class CumulativeHistogram {
         cumulHist = new int[Constants.NBCOLORS];
     }
 
+    /**
+     * Generate the cumulative histogram of the image.
+     * @param hist the histogram the cumulative Histogram is based on.
+     */
     public void generateCumulativeHistogram(int hist[]){
         int sum = 0;
         for (int i = 0; i < Constants.NBCOLORS; i++){

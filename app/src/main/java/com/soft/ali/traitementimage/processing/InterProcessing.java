@@ -1,7 +1,9 @@
 package com.soft.ali.traitementimage.processing;
 
 /**
- * Created by ali on 29/03/2017.
+ * Interface used for multithreading.
+ * It allows us to split the array in multiple part and call the proper method on a part of the array.
+ * Each processing method implements this class/
  */
 
 public interface InterProcessing {

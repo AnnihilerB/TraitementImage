@@ -3,16 +3,13 @@ package com.soft.ali.traitementimage;
 import android.graphics.Color;
 
 /**
- * Created by ali on 10/02/2017.
+ * Class handling a Look Up table.
+ * This table allows us to store results of a calculus.
+ * The calculus is made 255 times maximum.
  */
 
 public class LUT {
 
-    /**
-     * Class handling a Look Up table.
-     * This table allows us to store results of a calculus.
-     * The calculus is made 255 times maximum.
-     */
 
     private  float[] table;
     private float min;
@@ -71,6 +68,9 @@ public class LUT {
         max = ((maxR+maxG+maxB) / 3)/(float)255;
     }
 
+    /**
+     * Generates a reversed LUT.
+     */
     public void generateReversedLUT(){
         for (int i = 0; i < table.length; i ++)
             table[i] = 255 - i;

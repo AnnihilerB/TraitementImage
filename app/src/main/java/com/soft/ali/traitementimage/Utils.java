@@ -25,7 +25,7 @@ public class Utils {
      * This method checks if the device has any camera (front or back).
      * The verification is made by accessing the package manager which gives information about the various application packages.
      * As the phone camera is recognized as an app, checking if a camera is available is possible via the package manager.
-     *
+     * @param packageManager Framework for accessing features on the device.
      * @return true if the device has a camera, false instead.
      */
     public static boolean deviceHasCamera(PackageManager packageManager) {
@@ -53,7 +53,7 @@ public class Utils {
     /**
      * Create a temporary file in memory to store the photo.
      * The file is deleted when the user confirms the capture.
-     *
+     * @param context the context of the current application.
      * @return The path of the temporary file.
      */
     public static File createTemporaryFile(Context context) {
@@ -70,6 +70,12 @@ public class Utils {
         }
         return null;
     }
+
+    /**
+     * Update the image afeter a processing is over.
+     * @param image the image to display
+     * @param imgView the view to diplay the image into.
+     */
     public static void updateImageView(Img image, ImgView imgView){
         Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
         bitmap.setPixels(image.getArrayPixel(), 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());

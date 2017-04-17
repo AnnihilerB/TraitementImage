@@ -1,13 +1,10 @@
 package com.soft.ali.traitementimage.threads;
 
-import android.util.Log;
-
 import com.soft.ali.traitementimage.processing.InterProcessing;
 
 /**
- * Created by ali on 29/03/2017.
+ * Class running the thread on a part of the array.
  */
-
 public class Worker implements Runnable {
 
     private int lower;

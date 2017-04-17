@@ -1,9 +1,5 @@
 package com.soft.ali.traitementimage;
 
-/**
- * Created by ali on 27/01/2017.
- */
-
 import android.graphics.Bitmap;
 
 /**
@@ -22,7 +18,6 @@ public class Img {
     }
 
     public Img (Bitmap bitmap) {
-
         originalImage = bitmap;
         width = originalImage.getWidth();
         height = originalImage.getHeight();
@@ -30,18 +25,35 @@ public class Img {
         bitmap.getPixels(arrayPixel, 0, width, 0,0, width, height);
     }
 
+    /**
+     * Returns a reference to the pixel array.
+     * @return the pixel array.
+     */
     public int [] getArrayPixel() {
         return arrayPixel;
     }
 
+    /**
+     * returns the width of an image.
+     * @return width.
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * returns the height of an image.
+     * @return height.
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Return the original bitmap.
+     * Useful for restoring the image to its initial state.
+     * @return the original bitmap
+     */
     public Bitmap getOriginalBitmap(){
         return originalImage;
     }
@@ -59,6 +71,9 @@ public class Img {
         }
     }
 
+    /**
+     * Method restoring the displayed image to its first state when it was loaded.
+     */
     public void resetArrayPixels(){
         this.originalImage.getPixels(arrayPixel,0,width,0,0,width,height);
     }
