@@ -23,7 +23,14 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.google.common.base.Stopwatch;
+import com.soft.ali.traitementimage.processing.Colorize;
+import com.soft.ali.traitementimage.processing.ContrastAdjust;
+import com.soft.ali.traitementimage.processing.ExtendDynamism;
 import com.soft.ali.traitementimage.processing.HistogramEqua;
+import com.soft.ali.traitementimage.processing.Isolate;
+import com.soft.ali.traitementimage.processing.Overexposure;
+import com.soft.ali.traitementimage.processing.Sepia;
+import com.soft.ali.traitementimage.processing.ToGray;
 import com.soft.ali.traitementimage.threads.ProcessingThreads;
 
 import java.io.File;
@@ -115,7 +122,12 @@ public class MainActivity extends AppCompatActivity {
                 int value = seekBar.getProgress();
                 //Reducing the value to fit between -255 and 255.
                 value -= 255;
-                ImgProcessing.contrastAdjust(pixelsContrast, value);
+                ProcessingThreads threads = new ProcessingThreads(4, image.getWidth() * image.getHeight(), new ContrastAdjust(pixelsContrast, value));
+                try {
+                    threads.startThreads();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Utils.updateImageView(image, imgView);
             }
 
@@ -164,24 +176,12 @@ public class MainActivity extends AppCompatActivity {
         buttonGray.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProcessingThreads processing = new ProcessingThreads(4, image.getWidth() * image.getHeight(), new HistogramEqua());
-                ImgProcessing.generateHist();
+                ProcessingThreads threads = new ProcessingThreads(Runtime.getRuntime().availableProcessors(), image.getWidth()*image.getHeight(), new ToGray());
                 try {
-                    Stopwatch timer = Stopwatch.createStarted();
-                    processing.startThreads();
-                    Log.i("TIME", "Threads " + String.valueOf(timer.stop()));
-
-                    image.resetArrayPixels();
-                    imgView.setImageBitmap(image.getOriginalBitmap());
-
-                    Stopwatch timer2 = Stopwatch.createStarted();
-                    ImgProcessing.histogramEqualization(0, image.getWidth() * image.getHeight());
-                    Log.i("TIME", "Sans Threads " + String.valueOf(timer2.stop()));
-
+                    threads.startThreads();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                //ImgProcessing.toGray();
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -189,7 +189,12 @@ public class MainActivity extends AppCompatActivity {
         buttonColorize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.colorize(hueValue);
+                ProcessingThreads threads = new ProcessingThreads(Runtime.getRuntime().availableProcessors(), image.getWidth()*image.getHeight(), new Colorize(hueValue));
+                try {
+                    threads.startThreads();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -197,7 +202,13 @@ public class MainActivity extends AppCompatActivity {
         buttonEqualization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //ImgProcessing.histogramEqualization();
+                ImgProcessing.generateHist();
+                ProcessingThreads threads = new ProcessingThreads(Runtime.getRuntime().availableProcessors(), image.getWidth()*image.getHeight(), new HistogramEqua());
+                try {
+                    threads.startThreads();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -205,7 +216,13 @@ public class MainActivity extends AppCompatActivity {
         buttonExtension.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.extendDynamism();
+                ImgProcessing.generateDynamismLUT();
+                ProcessingThreads threads = new ProcessingThreads(Runtime.getRuntime().availableProcessors(), image.getWidth()*image.getHeight(), new ExtendDynamism());
+                try {
+                    threads.startThreads();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -213,7 +230,12 @@ public class MainActivity extends AppCompatActivity {
         buttonOverexposure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.overexposure();
+                ProcessingThreads threads = new ProcessingThreads(Runtime.getRuntime().availableProcessors(), image.getWidth()*image.getHeight(), new Overexposure());
+                try {
+                    threads.startThreads();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -221,7 +243,12 @@ public class MainActivity extends AppCompatActivity {
         buttonIsolate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.isolate(colorValue);
+                ProcessingThreads threads = new ProcessingThreads(Runtime.getRuntime().availableProcessors(), image.getWidth()*image.getHeight(), new Isolate(colorValue));
+                try {
+                    threads.startThreads();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -229,7 +256,12 @@ public class MainActivity extends AppCompatActivity {
         buttonSepia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.sepia();
+                ProcessingThreads threads = new ProcessingThreads(Runtime.getRuntime().availableProcessors(), image.getWidth()*image.getHeight(), new Sepia());
+                try {
+                    threads.startThreads();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Utils.updateImageView(image, imgView);
             }
         });
