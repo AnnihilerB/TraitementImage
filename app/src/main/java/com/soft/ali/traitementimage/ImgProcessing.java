@@ -127,8 +127,7 @@ public class ImgProcessing {
         }
 
         if(typeFilter == Constants.GAUSS){
-            Log.i("CONV", "dans calculConvolution : " + String.valueOf(typeFilter) + "  " + String.valueOf(n));
-            double sigma = 3.0;
+            double sigma = Constants.SIGMA;
             filter.setGauss(sigma);
             calculConvolution(filter.getFilter(), filter.getSizeFilter());
         }
@@ -177,7 +176,6 @@ public class ImgProcessing {
      * @param sizeFilter the size of the filer (odd number).
      */
     private static void calculConvolution(float [][] filterMatrix, int sizeFilter) {
-        Log.i("CONV", "dans calculConvolution : " + String.valueOf(sizeFilter));
         int pixels[] = image.getArrayPixel();
         int originalPixels[] = pixels.clone();
 
@@ -402,19 +400,15 @@ public class ImgProcessing {
      */
     public static void sketchImage(){
 
-        Log.i("REV", "Gray first image");
         ImgProcessing.toGray(0, image.getWidth() * image.getHeight());
         int[] originalPixels = image.getArrayPixel().clone();
 
-        Log.i("REV", "Reversing");
         ImgProcessing.reverseImg();
-        Log.i("REV", "Convolution");
         ImgProcessing.convolution(3, Constants.GAUSS);
 
 
         int reversedPixels[]  = image.getArrayPixel();
 
-        Log.i("REV", "Blending");
         for (int i = 0; i < originalPixels.length; i++){
             int value = (Color.red(reversedPixels[i]) + Color.red(originalPixels[i]));
             if (value > 255){
