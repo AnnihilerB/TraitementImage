@@ -2,6 +2,7 @@ package com.soft.ali.traitementimage;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.soft.ali.traitementimage.histogram.CumulativeHistogram;
 import com.soft.ali.traitementimage.histogram.Histogram;
@@ -13,6 +14,9 @@ import com.soft.ali.traitementimage.histogram.Histogram;
 public class ImgProcessing {
 
     private static Img image;
+    static  Histogram hist;
+    static CumulativeHistogram cumulativeHistogram;
+    static int []pixels;
 
 
     /**
@@ -38,31 +42,37 @@ public class ImgProcessing {
      * the V channel of the HSV colorspace.
      * First, an histogram and a cumulative histogram are generated.
      * Each pixel is converted into HSV. As the V component is between 0 and 1, the component is
-     * rescaled to be between 0 and 255.
+     * rescaled to fit between 0 and 255.
      * Then we get the value of the V component in the cumulative histogram. Then, this value is
      * divided by the number of pixels in order to rescale it between 0 and 1.
      */
-    public static void histogramEqualization(){
-        Histogram hist = new Histogram();
-        CumulativeHistogram cumulativeHistogram = new CumulativeHistogram();
+    public static void histogramEqualization(int lower, int upper){
 
-        int pixels[] = image.getArrayPixel();
         int channel = Constants.HSV_VIBRANCE;
 
-        hist.generateHSVHistogram(pixels, channel);
-        cumulativeHistogram.generateCumulativeHistogram(hist.getHistogram());
 
-        int nbPixels = hist.getNbPixels();
+
+        float nbPixels = (float)hist.getNbPixels();
         float[] hsv = new float[3];
 
-        for (int i = 0; i < pixels.length; i++){
+        for (int i = lower; i < upper; i++){
             Color.colorToHSV(pixels[i], hsv);
             int val = (int)(hsv[channel] * 255); //Rescaling the value
-            hsv[channel] = ((float) cumulativeHistogram.getCumulativeHistogramValueAt(val) / (float)nbPixels);
+            hsv[channel] = ((float) cumulativeHistogram.getCumulativeHistogramValueAt(val) / nbPixels);
             pixels[i] = Color.HSVToColor(hsv);
         }
     }
 
+    public static void generateHist(){
+        pixels = image.getArrayPixel();
+
+        hist = new Histogram();
+        cumulativeHistogram = new CumulativeHistogram();
+
+        hist.generateHSVHistogram(pixels, Constants.HSV_VIBRANCE);
+        cumulativeHistogram.generateCumulativeHistogram(hist.getHistogram());
+
+    }
 
     /**
      * Extending the image dynamism via a LUT.
@@ -87,12 +97,12 @@ public class ImgProcessing {
 
 
 
-    public static void toGray(){
+    public static void toGray(int lower, int upper){
         int red, green, blue;
         int rgb, total;
         int pixels[] = image.getArrayPixel();
 
-        for (int i = 0; i < pixels.length; i++) {
+        for (int i = lower; i < upper; i++) {
             rgb = pixels[i];
             red = ((Color.red(rgb)*3)/10);
             green = ((Color.green(rgb)*59)/100);
@@ -153,6 +163,7 @@ public class ImgProcessing {
             calculConvolution(filter.getFilter(), filter.getSizeFilter());
         }
     }
+
     private static int floorMod(int a, int b) {
         int r = a % b;
         if (r < 0)
@@ -208,7 +219,6 @@ public class ImgProcessing {
         }
 
     }
-
     /**
      * This function increase the brightness value of all pixels of a picture by an arbitrary value.
      */
@@ -352,7 +362,7 @@ public class ImgProcessing {
     /**
      * Get fourth first byte of binary string of a rgb arg
      * @param rgbArg
-     * @return
+     * @return The fourth byte of a String
      */
     public static String getFirstsBinaryValue(int rgbArg){
         String binaryString =Integer.toBinaryString(rgbArg);
@@ -367,7 +377,88 @@ public class ImgProcessing {
         image = imagebase;
     }
 
+    /**
+     * Reverse the color of a grayscale image.
+     * Constructs a LUT containing the reversed colors and then changes every pixels.
+     */
+    public static void reverseImg(){
+        ImgProcessing.toGray(0,  image.getWidth() * image.getHeight());
+        int pixels[] = image.getArrayPixel();
+
+        LUT reversedColors = new LUT();
+        reversedColors.generateReversedLUT();
+
+        for(int i = 0; i < pixels.length; i ++){
+            int value  = (int)reversedColors.getValueAt(Color.red(pixels[i]));
+            pixels[i] = Color.rgb(value, value, value);
+        }
+    }
+
+    /**
+     * Transform the image to simulate a sketch effect.
+     * The image is transformed into grayscale.
+     * A copy of this image is reversed and a Gaussian filter is applied.
+     * The two images are blend using the Linear dodge process. (http://www.wikiwand.com/en/Blend_modes#/Dodge_and_burn).
+     */
+    public static void sketchImage(){
+
+        Log.i("REV", "Gray first image");
+        ImgProcessing.toGray(0, image.getWidth() * image.getHeight());
+        int[] originalPixels = image.getArrayPixel().clone();
+
+        Log.i("REV", "Reversing");
+        ImgProcessing.reverseImg();
+        Log.i("REV", "Convolution");
+        ImgProcessing.convolution(3, Constants.GAUSS);
+
+
+        int reversedPixels[]  = image.getArrayPixel();
+
+        Log.i("REV", "Blending");
+        for (int i = 0; i < originalPixels.length; i++){
+            int value = (Color.red(reversedPixels[i]) + Color.red(originalPixels[i]));
+            if (value > 255){
+                value  = 120;
+            }
+            reversedPixels[i] = Color.rgb(value, value, value);
+        }
+    }
+
+    /**
+     * Adjust the contrast of the current image displayed on screen.
+     * The contrast method has been found here :
+     * http://www.dfstudios.co.uk/articles/programming/image-programming-algorithms/image-processing-algorithms-part-5-contrast-adjustment/
+     * @param contrast The contrast value the user wants..
+     */
+    public static void contrastAdjust(int[] originalPixels, int contrast){
+        int pixels[] = image.getArrayPixel();
+
+        float factor = (259 * (contrast + 255)) /(float) (255 * (259 - contrast));
+
+        for (int i = 0; i < pixels.length; i++){
+            int color = originalPixels[i];
+            int r = Math.round(truncate(factor * (Color.red(color)  - 128) + 128));
+            int g = Math.round(truncate(factor * (Color.green(color)  - 128) + 128));
+            int b = Math.round(truncate(factor * (Color.blue(color)  - 128) + 128));
+            pixels[i] = Color.rgb(r,g,b);
+        }
+    }
+
+    /**
+     * Truncate a color value in order to fit between 0 and 255.
+     * @param val the value to truncate
+     * @return the truncate value or the initial value if no truncating needed.
+     */
+    private static float truncate (float val){
+        if (val > 255)
+            return 255;
+        if (val < 0)
+            return 0;
+        return val;
+    }
 }
+
+
 
 
 

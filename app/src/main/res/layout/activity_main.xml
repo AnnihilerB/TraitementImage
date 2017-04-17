@@ -90,8 +90,37 @@
                 android:text="Hide Img/Img"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"/>
 
+            <Button
+                android:id="@+id/buttonSketch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sketch"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
         </LinearLayout>
     </HorizontalScrollView>
+
+
+    <SeekBar
+        android:id="@+id/contrastBar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonOkContrast"
+        android:visibility="invisible"
+        />
+
+    <Button
+        android:id="@+id/buttonOkContrast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:text="Ok"
+        android:visibility="invisible"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"/>
 
     <ImageButton
         android:id="@+id/buttonValue"
@@ -125,6 +154,17 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/buttonReset"
         android:layout_toEndOf="@+id/buttonReset" />
+
+    <ImageButton
+        android:id="@+id/buttonContrast"
+        android:src="@drawable/contrast"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-5dp"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/buttonLoadGallery"
+        android:layout_toStartOf="@+id/buttonLoadGallery" />
 
     <ImageButton
         android:id="@+id/buttonLoadGallery"

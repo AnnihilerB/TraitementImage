@@ -11,12 +11,20 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.Toast;
+
+import com.google.common.base.Stopwatch;
+import com.soft.ali.traitementimage.processing.HistogramEqua;
+import com.soft.ali.traitementimage.threads.ProcessingThreads;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private int sizeFilterValue = 3;
     private int typeFilterValue = 1;
 
+    //Used only for contrast enhancement.
+    int pixelsContrast[];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -43,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         mainContext = getApplicationContext();
 
         //Creating a blank image.
-        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena );
+        final Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lena);
         image = new Img(bitmap);
         imageHide = new Img();
         ImgProcessing.setImage(image);
@@ -61,11 +72,73 @@ public class MainActivity extends AppCompatActivity {
         Button buttonIsolate = (Button) findViewById(R.id.buttonIsolate);
         Button buttonSepia = (Button) findViewById(R.id.buttonSepia);
         Button buttonHide = (Button) findViewById(R.id.buttonImgHide);
+        Button buttonSketch = (Button)findViewById(R.id.buttonSketch);
+        Button buttonOkContrast = (Button)findViewById(R.id.buttonOkContrast);
+
+        HorizontalScrollView scroll =  (HorizontalScrollView)findViewById(R.id.scroll);
+        SeekBar contrastBar = (SeekBar)findViewById(R.id.contrastBar);
+
+        //Values of the seekbar between 0 and 510 to allow negative values to reduce contrast.
+        contrastBar.setMax(510);
+
         ImageButton buttonRes = (ImageButton) findViewById(R.id.buttonReset);
         ImageButton buttonValue = (ImageButton) findViewById(R.id.buttonValue);
         ImageButton buttonSave = (ImageButton)findViewById(R.id.buttonSave);
         ImageButton buttonLoadCamera = (ImageButton)findViewById(R.id.buttonLoadCamera);
         ImageButton buttonLoadGallery = (ImageButton)findViewById(R.id.buttonLoadGallery);
+        ImageButton buttonContrast = (ImageButton)findViewById(R.id.buttonContrast);
+
+        buttonOkContrast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scroll.setVisibility(View.VISIBLE);
+                buttonOkContrast.setVisibility(View.INVISIBLE);
+                contrastBar.setVisibility(View.INVISIBLE);
+
+            }
+        });
+
+        buttonContrast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                scroll.setVisibility(View.INVISIBLE);
+                buttonOkContrast.setVisibility(View.VISIBLE);
+                contrastBar.setVisibility(View.VISIBLE);
+                //Getting the pixels when we need to change the contrast. Allowing us to always have the same originals pixels.
+                pixelsContrast = image.getArrayPixel().clone();
+            }
+        });
+
+        contrastBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                int value = seekBar.getProgress();
+                //Reducing the value to fit between -255 and 255.
+                value -= 255;
+                ImgProcessing.contrastAdjust(pixelsContrast, value);
+                Utils.updateImageView(image, imgView);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+
+        buttonSketch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImgProcessing.sketchImage();
+                Utils.updateImageView(image, imgView);
+            }
+        });
 
         buttonLoadCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +164,24 @@ public class MainActivity extends AppCompatActivity {
         buttonGray.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.toGray();
+                ProcessingThreads processing = new ProcessingThreads(4, image.getWidth() * image.getHeight(), new HistogramEqua());
+                ImgProcessing.generateHist();
+                try {
+                    Stopwatch timer = Stopwatch.createStarted();
+                    processing.startThreads();
+                    Log.i("TIME", "Threads " + String.valueOf(timer.stop()));
+
+                    image.resetArrayPixels();
+                    imgView.setImageBitmap(image.getOriginalBitmap());
+
+                    Stopwatch timer2 = Stopwatch.createStarted();
+                    ImgProcessing.histogramEqualization(0, image.getWidth() * image.getHeight());
+                    Log.i("TIME", "Sans Threads " + String.valueOf(timer2.stop()));
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //ImgProcessing.toGray();
                 Utils.updateImageView(image, imgView);
             }
         });
@@ -107,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         buttonEqualization.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImgProcessing.histogramEqualization();
+                //ImgProcessing.histogramEqualization();
                 Utils.updateImageView(image, imgView);
             }
         });
